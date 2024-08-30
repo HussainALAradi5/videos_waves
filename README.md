@@ -56,7 +56,7 @@
 
 ### **_Credits_**
 
-##### google for images,
+##### google for images and videos,
 
 ##### inspired by:The Populer TikTok
 
