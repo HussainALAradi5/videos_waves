@@ -1,0 +1,63 @@
+# Videos_waves
+
+## Created Date: 30/8/2024
+
+### By: Hussain Al Aradi
+
+#### [Gmail](hussainaradi.ha@gmail.com) | [GitHub](https://github.com/HussainALAradi5) | [LinkedIn](https://www.linkedin.com/in/hussainalaradi/)
+
+---
+
+### **_Description_**
+
+#### this project is small and project to give mimic the behaviour of the TikTok .
+
+#### [project]:TBA
+
+---
+
+### **_Technologies Used_**
+
+- JS
+- React(FrameWork)
+- Node js (Runtime-evnironement)
+- CSS(for style)
+- HTML
+
+---
+
+### **_Getting Started_**
+
+##### just scroll up and dawn to watch the videos as you like 😉
+
+---
+
+### UML Diagrams:
+
+#### Client:
+
+---
+
+### **_Screenshots_**
+
+##### intro
+
+![intro]:TBA
+
+#### showcase:
+
+#### animated showcase:
+
+![video]:TBA
+
+### **_Future Updates_**
+
+---
+
+### **_Credits_**
+
+##### google for images,
+
+##### inspired by:The Populer TikTok
+
+---
