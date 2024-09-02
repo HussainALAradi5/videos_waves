@@ -34,7 +34,9 @@
 
 ### UML Diagrams:
 
-#### Client:
+#### [hierarchy](./client/public/Videos_Waves%20-Hierarchy_Diagram.drawio.png)
+
+#### [UML Diagram](<./client/public/Videos_Waves%20-UML_Diagram.drawio%20(1).png>)
 
 ---
 
@@ -53,10 +55,6 @@
 ### **_Future Updates_**
 
 ### diagrams:
-
-### [hierarchy](./client/public/Videos_Waves%20-Hierarchy_Diagram.drawio.png)
-
-### [UML Diagram](<./client/public/Videos_Waves%20-UML_Diagram.drawio%20(1).png>)
 
 ---
 
