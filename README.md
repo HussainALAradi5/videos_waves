@@ -28,7 +28,7 @@
 
 ### **_Getting Started_**
 
-##### just scroll up and dawn to watch the videos as you like 😉
+##### just scroll up and dawn to watch the videos as you wish 😉
 
 ---
 
