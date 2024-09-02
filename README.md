@@ -54,8 +54,6 @@
 
 ### **_Future Updates_**
 
-### diagrams:
-
 ---
 
 ### **_Credits_**
