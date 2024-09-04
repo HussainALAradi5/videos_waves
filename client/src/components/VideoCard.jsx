@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Box,
@@ -7,9 +7,17 @@ import {
   VStack,
   HStack,
   IconButton,
-  Button
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure
 } from '@chakra-ui/react'
 import { AiOutlineLike, AiOutlinePlayCircle } from 'react-icons/ai'
+import ReactPlayer from 'react-player'
 import { likeVideo, unlikeVideo } from '../service/auth'
 import Comments from './Comments'
 
@@ -19,12 +27,10 @@ const VideoCard = ({ video }) => {
   )
   const [numberOfLikes, setNumberOfLikes] = useState(video.numberOfLikes)
   const [userId, setUserId] = useState(localStorage.getItem('userId'))
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  useEffect(() => {
-    // Any additional logic on component mount
-  }, [video._id])
-
-  const handleLikeClick = async () => {
+  const handleLikeClick = async (event) => {
+    event.stopPropagation()
     try {
       if (liked) {
         await unlikeVideo(video._id)
@@ -43,11 +49,21 @@ const VideoCard = ({ video }) => {
     }
   }
 
+  const handleCommentClick = (event) => {
+    event.stopPropagation()
+  }
+
+  const handlePlayClick = (event) => {
+    event.stopPropagation()
+    onOpen()
+  }
+
   const thumbnailUrl = video?.thumbnailUrl || 'default-thumbnail.png'
   const title = video?.title || 'Untitled Video'
+  const videoUrl = video?.videoUrl || '' // Make sure `videoUrl` is provided in the video object
 
   return (
-    <Link to={`/videos/${video._id}`} style={{ textDecoration: 'none' }}>
+    <>
       <Box
         borderWidth={1}
         borderRadius="lg"
@@ -64,14 +80,16 @@ const VideoCard = ({ video }) => {
         width="100%"
         maxW="400px"
       >
-        <Image
-          src={thumbnailUrl}
-          alt={title}
-          boxSize="full"
-          objectFit="cover"
-          height="250px"
-          borderTopRadius="lg"
-        />
+        <Link to={`/videos/${video._id}`} style={{ display: 'block' }}>
+          <Image
+            src={thumbnailUrl}
+            alt={title}
+            boxSize="full"
+            objectFit="cover"
+            height="250px"
+            borderTopRadius="lg"
+          />
+        </Link>
         <VStack p={4} spacing={2} align="start">
           <Text fontWeight="bold" fontSize="lg" noOfLines={1}>
             {title}
@@ -91,6 +109,7 @@ const VideoCard = ({ video }) => {
               leftIcon={<AiOutlinePlayCircle />}
               variant="solid"
               colorScheme="teal"
+              onClick={handlePlayClick}
             >
               Play
             </Button>
@@ -98,7 +117,19 @@ const VideoCard = ({ video }) => {
           <Comments videoId={video._id} userId={userId} />
         </VStack>
       </Box>
-    </Link>
+
+      {/* Modal for playing video */}
+      <Modal isOpen={isOpen} onClose={onClose} size="full">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{title}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody p={0}>
+            <ReactPlayer url={videoUrl} controls width="100%" height="100%" />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
 

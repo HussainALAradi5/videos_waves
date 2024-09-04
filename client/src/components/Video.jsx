@@ -3,7 +3,14 @@ import axios from 'axios'
 import VideoDetails from './VideoDetails'
 import VideoUpload from './VideoUpload'
 import VideoCard from './VideoCard'
-import { Box, Container, VStack, Button, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Container,
+  VStack,
+  Button,
+  Text,
+  SimpleGrid
+} from '@chakra-ui/react'
 
 const Video = () => {
   const [videos, setVideos] = useState([])
@@ -50,7 +57,6 @@ const Video = () => {
   }
 
   const handleVideoSelect = (video) => {
-    console.log('Selected Video:', video)
     setSelectedVideo(video)
   }
 
@@ -78,13 +84,15 @@ const Video = () => {
             {!selectedVideo ? (
               <Box>
                 {videos.length > 0 ? (
-                  videos.map((video) => (
-                    <VideoCard
-                      key={video._id}
-                      video={video}
-                      onClick={() => handleVideoSelect(video)}
-                    />
-                  ))
+                  <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+                    {videos.map((video) => (
+                      <VideoCard
+                        key={video._id}
+                        video={video}
+                        onClick={() => handleVideoSelect(video)}
+                      />
+                    ))}
+                  </SimpleGrid>
                 ) : (
                   <Text>No videos available.</Text>
                 )}
