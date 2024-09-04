@@ -17,13 +17,13 @@ const Login = () => {
         duration: 4000,
         isClosable: true
       })
-      setTimeout(() => navigate('/profile'), 4000)
+      setTimeout(() => navigate('/profile'), 2000)
     } catch (error) {
       toast({
         title: 'Login failed.',
         description: error.response?.data?.message || 'An error occurred.',
         status: 'error',
-        duration: 4000,
+        duration: 2000,
         isClosable: true
       })
     }

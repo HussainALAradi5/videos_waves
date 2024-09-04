@@ -5,7 +5,8 @@ import {
   AiOutlineHome,
   AiOutlineLogin,
   AiOutlineUserAdd,
-  AiOutlineLogout
+  AiOutlineLogout,
+  AiOutlineUser
 } from 'react-icons/ai'
 import { getToken, logout } from '../service/auth'
 
@@ -69,14 +70,26 @@ const NavBar = () => {
             </Button>
           </>
         ) : (
-          <Button
-            onClick={handleLogout}
-            colorScheme="red"
-            variant="solid"
-            leftIcon={<AiOutlineLogout />}
-          >
-            Sign Out
-          </Button>
+          <>
+            <Button
+              as={Link}
+              to="/profile"
+              colorScheme="blue"
+              variant="solid"
+              leftIcon={<AiOutlineUser />}
+              mr={4}
+            >
+              Profile
+            </Button>
+            <Button
+              onClick={handleLogout}
+              colorScheme="red"
+              variant="solid"
+              leftIcon={<AiOutlineLogout />}
+            >
+              Sign Out
+            </Button>
+          </>
         )}
       </Flex>
     </Flex>

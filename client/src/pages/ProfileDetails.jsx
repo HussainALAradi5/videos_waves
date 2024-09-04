@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Box, Text } from '@chakra-ui/react'
 import { getUserDetails } from '../service/auth'
+import UserCard from '../components/UserCard'
 
 const ProfileDetails = () => {
   const [user, setUser] = useState(null)
@@ -17,9 +18,8 @@ const ProfileDetails = () => {
   if (!user) return <Text>Loading...</Text>
 
   return (
-    <Box>
-      <Text>Username: {user.userName}</Text>
-      <Text>Email: {user.email}</Text>
+    <Box p={4}>
+      <UserCard user={user} />
     </Box>
   )
 }

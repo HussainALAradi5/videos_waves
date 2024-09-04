@@ -15,7 +15,7 @@ const register = async (userData) => {
 const updateProfile = async (profileData) => {
   const token = getToken()
   if (!token) throw new Error('No token found')
-  const response = await axios.put(`${API_URL}/user/update`, profileData, {
+  const response = await axios.put(`${API_URL}/user/edit`, profileData, {
     headers: { Authorization: `Bearer ${token}` }
   })
   return response.data

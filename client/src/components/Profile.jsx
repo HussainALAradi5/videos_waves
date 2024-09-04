@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Button, Text, useToast } from '@chakra-ui/react'
+import { Box, Button, useToast } from '@chakra-ui/react'
 import { getUserDetails, logout } from '../service/auth'
+import ProfileEdit from '../pages/ProfileEdit'
+import ProfileDetails from '../pages/ProfileDetails'
 
 const Profile = () => {
   const [user, setUser] = useState(null)
@@ -18,7 +20,7 @@ const Profile = () => {
           title: 'Error fetching user details.',
           description: 'Please log in again.',
           status: 'error',
-          duration: 4000,
+          duration: 2000,
           isClosable: true
         })
         navigate('/login')
@@ -27,30 +29,10 @@ const Profile = () => {
     fetchUser()
   }, [navigate, toast])
 
-  const handleLogout = () => {
-    logout()
-    toast({
-      title: 'Logged out.',
-      description: "You've been successfully logged out.",
-      status: 'success',
-      duration: 4000,
-      isClosable: true
-    })
-    navigate('/')
-  }
-
   return (
     <Box p={4}>
-      {user ? (
-        <>
-          <Text mb={4}>Welcome, {user.userName}!</Text>
-          <Button onClick={handleLogout} colorScheme="teal">
-            Sign Out
-          </Button>
-        </>
-      ) : (
-        <Text>Loading...</Text>
-      )}
+      <ProfileDetails />
+      <ProfileEdit />
     </Box>
   )
 }
