@@ -14,7 +14,7 @@ const Video = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('/api/videos')
+        const response = await axios.get('http://localhost:5000/videos')
         setVideos(response.data)
       } catch (error) {
         console.error('Error fetching videos:', error)
@@ -31,7 +31,7 @@ const Video = () => {
       formData.append('file', videoData.file)
       formData.append('title', videoData.title)
 
-      await axios.post('/api/videos/upload', formData, {
+      await axios.post('http://localhost:5000/videos/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -40,7 +40,7 @@ const Video = () => {
 
       setIsUploading(false)
 
-      const response = await axios.get('/api/videos')
+      const response = await axios.get('http://localhost:5000/videos')
       setVideos(response.data)
       setError(null)
     } catch (error) {
