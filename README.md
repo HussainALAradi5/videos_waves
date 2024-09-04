@@ -23,7 +23,7 @@
 - Node js (Runtime-evnironement)
 - CSS(for style)
 - HTML
-- Chakra UI
+- Chakra UI(to have nice and responsive UI)
 
 ---
 
@@ -59,7 +59,7 @@
 
 ### **_Credits_**
 
-##### google for images and videos,
+##### google for images and videos,[Chakra UI](https://v2.chakra-ui.com/)
 
 ##### inspired by:The Populer TikTok
 
