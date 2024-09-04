@@ -1,18 +1,11 @@
 import { useState } from 'react'
-import { Box, Text, Avatar, VStack, Button, useToast } from '@chakra-ui/react'
+import { Box, Text, Avatar, VStack, Button } from '@chakra-ui/react'
 import ProfileEdit from './ProfileEdit'
 
 const ProfileDetails = ({ user, onProfileUpdate }) => {
   const [isEditing, setIsEditing] = useState(false)
-  const toast = useToast()
 
   const handleSave = () => {
-    toast({
-      title: 'Profile updated.',
-      status: 'success',
-      duration: 2000,
-      isClosable: true
-    })
     setIsEditing(false)
     onProfileUpdate()
   }

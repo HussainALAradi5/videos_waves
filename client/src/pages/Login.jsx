@@ -1,3 +1,4 @@
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
 import { login } from '../service/auth'
@@ -14,10 +15,10 @@ const Login = () => {
         title: 'Login successful.',
         description: 'You are now logged in. Redirecting to profile...',
         status: 'success',
-        duration: 4000,
+        duration: 2000,
         isClosable: true
       })
-      setTimeout(() => navigate('/profile'), 2000)
+      navigate('/profile') // Immediate redirection
     } catch (error) {
       toast({
         title: 'Login failed.',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Button, Flex, useToast } from '@chakra-ui/react'
 import {
   AiOutlineHome,
@@ -14,6 +14,7 @@ const NavBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const navigate = useNavigate()
   const toast = useToast()
+  const location = useLocation()
 
   useEffect(() => {
     const token = getToken()
@@ -26,11 +27,13 @@ const NavBar = () => {
     toast({
       title: 'Logged out successfully.',
       status: 'success',
-      duration: 4000,
+      duration: 2000,
       isClosable: true
     })
     navigate('/')
   }
+
+  const isProfilePage = location.pathname === '/profile'
 
   return (
     <Flex bg="cyan.500" p={4} justify="space-between" align="center">
@@ -47,7 +50,7 @@ const NavBar = () => {
         </Button>
       </Flex>
       <Flex>
-        {!isLoggedIn ? (
+        {!isLoggedIn && !isProfilePage && (
           <>
             <Button
               as={Link}
@@ -69,7 +72,8 @@ const NavBar = () => {
               Login
             </Button>
           </>
-        ) : (
+        )}
+        {isLoggedIn && !isProfilePage && (
           <>
             <Button
               as={Link}
