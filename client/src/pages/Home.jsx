@@ -1,4 +1,3 @@
-import React from 'react'
 import { Container, Grid, Heading } from '@chakra-ui/react'
 import VideoCard from '../components/VideoCard'
 

@@ -1,59 +1,69 @@
 import { useState } from 'react'
-import { Box, Button, Input, useToast } from '@chakra-ui/react'
-import axios from 'axios'
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  VStack,
+  Text
+} from '@chakra-ui/react'
+import { useDropzone } from 'react-dropzone'
 
-const VideoUpload = () => {
+const VideoUpload = ({ onUpload }) => {
   const [file, setFile] = useState(null)
-  const toast = useToast()
+  const [title, setTitle] = useState('')
 
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0])
-  }
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: 'video/*',
+    onDrop: (acceptedFiles) => setFile(acceptedFiles[0])
+  })
 
-  const handleUpload = async () => {
-    if (!file) {
-      toast({
-        title: 'No file selected.',
-        description: 'Please select a video file to upload.',
-        status: 'warning',
-        duration: 3000,
-        isClosable: true
-      })
-      return
-    }
+  const handleTitleChange = (event) => setTitle(event.target.value)
 
-    const formData = new FormData()
-    formData.append('video', file)
-
-    try {
-      await axios.post('/api/videos/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-      toast({
-        title: 'Upload successful!',
-        description: 'Your video has been uploaded.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true
-      })
-      setFile(null)
-    } catch (error) {
-      toast({
-        title: 'Upload failed.',
-        description: 'There was an error uploading your video.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true
-      })
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    if (file && title) {
+      onUpload({ file, title })
     }
   }
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={4}>
-      <Input type="file" accept="video/*" onChange={handleFileChange} mb={4} />
-      <Button colorScheme="teal" onClick={handleUpload}>
-        Upload Video
-      </Button>
+    <Box>
+      <form onSubmit={handleSubmit}>
+        <VStack spacing={4}>
+          <FormControl>
+            <FormLabel>Video Title</FormLabel>
+            <Input value={title} onChange={handleTitleChange} />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Video File</FormLabel>
+            <Box
+              {...getRootProps()}
+              border="2px dashed"
+              borderColor="gray.300"
+              p={4}
+              textAlign="center"
+              cursor="pointer"
+              _hover={{ borderColor: 'gray.500' }}
+            >
+              <input {...getInputProps()} />
+              {file ? (
+                <Text>{file.name}</Text>
+              ) : (
+                <Text>
+                  {isDragActive
+                    ? 'Drop the video here...'
+                    : 'Drag & drop a video file here, or click to select one'}
+                </Text>
+              )}
+            </Box>
+          </FormControl>
+          <Button type="submit" colorScheme="teal">
+            Upload Video
+          </Button>
+        </VStack>
+      </form>
     </Box>
   )
 }

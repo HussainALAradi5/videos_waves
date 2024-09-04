@@ -1,23 +1,15 @@
-import { Box, Heading, Text, Image, Button, VStack } from '@chakra-ui/react'
+import { Box, Text, VStack } from '@chakra-ui/react'
 
-const VideoDetails = () => {
+const VideoDetails = ({ video }) => {
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
-      <Image
-        src="https://via.placeholder.com/600x400"
-        alt="Video Thumbnail"
-        borderRadius="md"
-        mb={4}
-      />
-      <VStack spacing={4} align="start">
-        <Heading as="h2" size="lg">
-          Video Title
-        </Heading>
-        <Text>
-          Description of the video goes here. This is where you can add more
-          details about the content of the video.
+    <Box p={4} borderWidth={1} borderRadius="md">
+      <VStack spacing={4}>
+        <Text fontSize="lg" fontWeight="bold">
+          {video.title}
         </Text>
-        <Button colorScheme="teal">Watch Now</Button>
+        <Text>Likes: {video.numberOfLikes}</Text>
+        <Text>Views: {video.numberOfViews}</Text>
+        {/* Add video player here */}
       </VStack>
     </Box>
   )
