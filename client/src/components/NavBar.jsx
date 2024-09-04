@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Button, Flex, useToast } from '@chakra-ui/react'
+import { Button, Flex, useToast, Box, Text } from '@chakra-ui/react'
 import {
   AiOutlineHome,
   AiOutlineLogin,
@@ -37,79 +37,99 @@ const NavBar = () => {
   const isProfilePage = location.pathname === '/profile'
 
   return (
-    <Flex bg="cyan.500" p={4} justify="space-between" align="center">
-      <Flex>
-        <Button
-          as={Link}
-          to="/"
-          colorScheme="blue"
-          variant="solid"
-          leftIcon={<AiOutlineHome />}
-          mr={4}
-        >
-          Home
-        </Button>
-        {isLoggedIn && (
+    <Box bg="cyan.500" p={4} position="relative" overflow="hidden">
+      <Flex
+        justify="space-between"
+        align="center"
+        position="relative"
+        zIndex={1}
+      >
+        <Flex align="center">
+          <Text fontSize="xl" fontWeight="bold" color="white" mr={4}>
+            Videos Waves🌊
+          </Text>
           <Button
             as={Link}
-            to="/upload"
+            to="/"
             colorScheme="blue"
             variant="solid"
-            leftIcon={<AiOutlineUpload />}
+            leftIcon={<AiOutlineHome />}
             mr={4}
           >
-            Upload Video
+            Home
           </Button>
-        )}
-      </Flex>
-      <Flex>
-        {!isLoggedIn && !isProfilePage && (
-          <>
+          {isLoggedIn && (
             <Button
               as={Link}
-              to="/register"
+              to="/upload"
               colorScheme="blue"
               variant="solid"
-              leftIcon={<AiOutlineUserAdd />}
+              leftIcon={<AiOutlineUpload />}
               mr={4}
             >
-              Register
+              Upload Video
             </Button>
-            <Button
-              as={Link}
-              to="/login"
-              colorScheme="blue"
-              variant="solid"
-              leftIcon={<AiOutlineLogin />}
-            >
-              Login
-            </Button>
-          </>
-        )}
-        {isLoggedIn && (
-          <>
-            <Button
-              as={Link}
-              to="/profile"
-              colorScheme="blue"
-              variant="solid"
-              leftIcon={<AiOutlineUser />}
-              mr={4}
-            >
-              Profile
-            </Button>
-            <Button
-              onClick={handleLogout}
-              colorScheme="red"
-              variant="solid"
-              leftIcon={<AiOutlineLogout />}
-            >
-              Sign Out
-            </Button>
-          </>
-        )}
+          )}
+        </Flex>
+        <Flex>
+          {!isLoggedIn && !isProfilePage && (
+            <>
+              <Button
+                as={Link}
+                to="/register"
+                colorScheme="blue"
+                variant="solid"
+                leftIcon={<AiOutlineUserAdd />}
+                mr={4}
+              >
+                Register
+              </Button>
+              <Button
+                as={Link}
+                to="/login"
+                colorScheme="blue"
+                variant="solid"
+                leftIcon={<AiOutlineLogin />}
+              >
+                Login
+              </Button>
+            </>
+          )}
+          {isLoggedIn && (
+            <>
+              <Button
+                as={Link}
+                to="/profile"
+                colorScheme="blue"
+                variant="solid"
+                leftIcon={<AiOutlineUser />}
+                mr={4}
+              >
+                Profile
+              </Button>
+              <Button
+                onClick={handleLogout}
+                colorScheme="red"
+                variant="solid"
+                leftIcon={<AiOutlineLogout />}
+              >
+                Sign Out
+              </Button>
+            </>
+          )}
+        </Flex>
       </Flex>
-    </Flex>
+      <Box
+        position="absolute"
+        bottom="0"
+        left="0"
+        width="100%"
+        height="100px"
+        bg="cyan.600"
+        transform="skewY(-6deg)"
+        zIndex={0}
+      />
+    </Box>
   )
 }
 
