@@ -3,43 +3,50 @@ const authService = require('../service/auth')
 const multer = require('multer')
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '../../client/public/videos')
+    cb(null, path.join(__dirname, '../public/videos'))
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`)
+    cb(null, Date.now() + path.extname(file.originalname))
   }
 })
 multer({ storage })
 const uploadVideo = async (req, res) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '')
-  if (!token) {
-    return res
-      .status(401)
-      .json({ message: 'Authorization denied, no token provided' })
-  }
-
-  const decoded = authService.verifyToken(token)
-  if (!decoded) {
-    return res.status(401).json({ message: 'Invalid token' })
-  }
-
   try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' })
+    }
+
+    const token = req.header('Authorization')?.replace('Bearer ', '')
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: 'Authorization denied, no token provided' })
+    }
+
+    const decoded = authService.verifyToken(token)
+    if (!decoded) {
+      return res.status(401).json({ message: 'Invalid token' })
+    }
+
     const { title } = req.body
     const userId = decoded.id
+    const videoUrl = `http://localhost:5000/videos/${req.file.filename}`
 
     const newVideo = new Video({
       title,
       userId,
+      videoUrl,
       numberOfLikes: 0,
       numberOfViews: 0,
-      comments: []
+      comments: [],
+      likedBy: []
     })
 
     await newVideo.save()
     res.status(201).json(newVideo)
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Server error while uploading video' })
+    console.error('Server error:', error.message)
+    res.status(500).json({ message: 'Server error while uploading video' })
   }
 }
 
