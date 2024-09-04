@@ -14,8 +14,7 @@ const ProfileEdit = () => {
     setFormData({ ...formData, [event.target.name]: event.target.value })
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
+  const handleSubmit = async (formData) => {
     try {
       await updateProfile(formData)
       toast({ title: 'Profile updated.', status: 'success', duration: 2000 })

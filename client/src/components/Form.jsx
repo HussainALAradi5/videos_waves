@@ -51,6 +51,7 @@ const Form = ({ fields, onSubmit, buttonText }) => {
               variant="filled"
               bg="white"
               _placeholder={{ color: 'gray.500' }}
+              value={formData[field.name] || ''} // Ensure value is controlled
             />
           </Box>
         ))}
