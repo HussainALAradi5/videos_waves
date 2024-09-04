@@ -86,7 +86,7 @@ const NavBar = () => {
             </Button>
           </>
         )}
-        {isLoggedIn && !isProfilePage && (
+        {isLoggedIn && (
           <>
             <Button
               as={Link}
