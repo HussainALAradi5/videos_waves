@@ -141,11 +141,91 @@ const getAllVideos = async (req, res) => {
     res.status(500).json({ message: 'Error fetching videos' })
   }
 }
+const likeVideo = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '')
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Authorization denied, no token provided' })
+  }
+
+  const decoded = authService.verifyToken(token)
+  if (!decoded) {
+    return res.status(401).json({ message: 'Invalid token' })
+  }
+
+  try {
+    const video = await Video.findById(req.params.id)
+    if (!video) {
+      return res.status(404).json({ message: 'Video not found' })
+    }
+
+    if (!video.likedBy) {
+      video.likedBy = []
+    }
+
+    // Check if the user has already liked the video
+    if (video.likedBy.includes(decoded.id)) {
+      return res.status(400).json({ message: 'Already liked' })
+    }
+
+    video.likedBy.push(decoded.id)
+    video.numberOfLikes += 1
+
+    await video.save()
+    res.status(200).json(video)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Server error while liking video' })
+  }
+}
+
+const unlikeVideo = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '')
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Authorization denied, no token provided' })
+  }
+
+  const decoded = authService.verifyToken(token)
+  if (!decoded) {
+    return res.status(401).json({ message: 'Invalid token' })
+  }
+
+  try {
+    const video = await Video.findById(req.params.id)
+    if (!video) {
+      return res.status(404).json({ message: 'Video not found' })
+    }
+
+    if (!video.likedBy) {
+      video.likedBy = []
+    }
+
+    if (!video.likedBy.includes(decoded.id)) {
+      return res.status(400).json({ message: 'Not liked yet' })
+    }
+
+    video.likedBy = video.likedBy.filter(
+      (userId) => userId.toString() !== decoded.id.toString()
+    )
+    video.numberOfLikes -= 1
+
+    await video.save()
+    res.status(200).json(video)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Server error while unliking video' })
+  }
+}
 module.exports = {
   uploadVideo,
   showRandomVideo,
   getVideoById,
   updateVideo,
   removeVideo,
-  getAllVideos
+  getAllVideos,
+  likeVideo,
+  unlikeVideo
 }

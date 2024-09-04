@@ -9,8 +9,9 @@ const videoSchema = new mongoose.Schema(
         ref: 'Comment'
       }
     ],
-    numberOfLikes: { type: Number },
-    numberOfViews: { type: Number }
+    numberOfLikes: { type: Number, default: 0 },
+    numberOfViews: { type: Number, default: 0 },
+    likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
   },
   { timestamps: true }
 )

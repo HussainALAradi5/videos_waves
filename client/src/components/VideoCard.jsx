@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Box,
   Image,
@@ -8,11 +9,43 @@ import {
   Button
 } from '@chakra-ui/react'
 import { AiOutlineLike, AiOutlinePlayCircle } from 'react-icons/ai'
+import axios from 'axios'
 
 const VideoCard = ({ video, onClick }) => {
+  const [liked, setLiked] = useState(
+    video.likedBy?.includes(localStorage.getItem('userId'))
+  )
+  const [numberOfLikes, setNumberOfLikes] = useState(video.numberOfLikes)
+
+  const handleLikeClick = async () => {
+    const token = localStorage.getItem('token')
+    const url = `http://localhost:5000/videos/${video._id}/${
+      liked ? 'unlike' : 'like'
+    }`
+
+    try {
+      const response = await axios.post(
+        url,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      )
+
+      if (liked) {
+        setLiked(false)
+        setNumberOfLikes((prev) => prev - 1)
+      } else {
+        setLiked(true)
+        setNumberOfLikes((prev) => prev + 1)
+      }
+    } catch (error) {
+      console.error('Error liking/unliking video:', error)
+    }
+  }
+
   const thumbnailUrl = video?.thumbnailUrl || 'default-thumbnail.png'
   const title = video?.title || 'Untitled Video'
-  const numberOfLikes = video?.numberOfLikes ?? 0
 
   return (
     <Box
@@ -59,7 +92,8 @@ const VideoCard = ({ video, onClick }) => {
               icon={<AiOutlineLike />}
               variant="ghost"
               colorScheme="teal"
-              aria-label="Like"
+              aria-label={liked ? 'Unlike' : 'Like'}
+              onClick={handleLikeClick}
             />
             <Text>{numberOfLikes}</Text>
           </HStack>
