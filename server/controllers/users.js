@@ -7,7 +7,7 @@ const invalidData = (fields) => {
 
 const register = async (req, res) => {
   const { userName, password, email } = req.body
-
+  console.log(req.body)
   if (invalidData([userName, password, email])) {
     return res.status(400).json({ message: 'You must fill all the fields!' })
   }
