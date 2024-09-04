@@ -16,4 +16,4 @@ const adminRequestSchema = new mongoose.Schema(
 )
 const model = mongoose.model('Request', adminRequestSchema)
 const Request = model
-module.exports = { Request }
+module.exports = Request

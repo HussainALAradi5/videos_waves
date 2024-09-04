@@ -32,7 +32,6 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, userName, password } = req.body
 
-  // Validate required fields
   if (invalidData([email || userName, password])) {
     return res.status(400).json({ message: 'You must fill all the fields!' })
   }

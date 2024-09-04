@@ -23,6 +23,7 @@
 - Node js (Runtime-evnironement)
 - CSS(for style)
 - HTML
+- Chakra UI
 
 ---
 

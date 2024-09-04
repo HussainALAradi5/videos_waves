@@ -1,12 +1,16 @@
 import axios from 'axios'
 
-const API_URL = 'https://localhost:5000'
+const API_URL = 'http://localhost:5000'
 
 const register = async (userData) => {
-  const response = await axios.post(`${API_URL}/user/register`, userData)
-  console.log(response)
-
-  return response.data
+  try {
+    const response = await axios.post(`${API_URL}/user/register`, userData)
+    return response.data
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || 'An error occurred during registration'
+    )
+  }
 }
 const updateProfile = async (profileData) => {
   const token = getToken()
