@@ -43,6 +43,7 @@ const authenticate = (req, res, next) => {
   req.user = decoded
   next()
 }
+
 module.exports = {
   hashPassword,
   comparePassword,

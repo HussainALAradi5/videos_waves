@@ -1,29 +1,20 @@
 import { useState } from 'react'
-import { Box, Text, Avatar, VStack, Button } from '@chakra-ui/react'
+import { Box, Text, Avatar, VStack, Button, useToast } from '@chakra-ui/react'
 import ProfileEdit from './ProfileEdit'
-import { useToast } from '@chakra-ui/react'
 
-const UserCard = ({ user, onProfileUpdate }) => {
+const ProfileDetails = ({ user, onProfileUpdate }) => {
   const [isEditing, setIsEditing] = useState(false)
   const toast = useToast()
 
-  const handleProfileUpdate = async () => {
-    try {
-      ;(await onProfileUpdate()) /
-        toast({
-          title: 'Profile updated.',
-          status: 'success',
-          duration: 2000,
-          isClosable: true
-        })
-    } catch (error) {
-      toast({
-        title: 'Error updating profile.',
-        status: 'error',
-        duration: 2000,
-        isClosable: true
-      })
-    }
+  const handleSave = () => {
+    toast({
+      title: 'Profile updated.',
+      status: 'success',
+      duration: 2000,
+      isClosable: true
+    })
+    setIsEditing(false)
+    onProfileUpdate()
   }
 
   return (
@@ -48,9 +39,9 @@ const UserCard = ({ user, onProfileUpdate }) => {
           <ProfileEdit
             initialData={{
               userName: user.userName,
-              email: user.email
+              newPassword: ''
             }}
-            onSave={handleProfileUpdate}
+            onSave={handleSave}
             onCancel={() => setIsEditing(false)}
           />
         ) : (
@@ -75,4 +66,4 @@ const UserCard = ({ user, onProfileUpdate }) => {
   )
 }
 
-export default UserCard
+export default ProfileDetails

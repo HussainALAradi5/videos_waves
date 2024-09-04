@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Button, useToast } from '@chakra-ui/react'
-import { getUserDetails, logout } from '../service/auth'
-import ProfileEdit from '../pages/ProfileEdit'
-import ProfileDetails from '../pages/ProfileDetails'
+import { Box, useToast } from '@chakra-ui/react'
+import { getUserDetails } from '../service/auth'
+import UserCard from './UserCard'
 
 const Profile = () => {
   const [user, setUser] = useState(null)
@@ -29,10 +28,24 @@ const Profile = () => {
     fetchUser()
   }, [navigate, toast])
 
+  const handleProfileUpdate = async () => {
+    try {
+      const userDetails = await getUserDetails()
+      setUser(userDetails)
+    } catch (error) {
+      toast({
+        title: 'Error updating profile.',
+        description: 'Please try again later.',
+        status: 'error',
+        duration: 2000,
+        isClosable: true
+      })
+    }
+  }
+
   return (
     <Box p={4}>
-      <ProfileDetails />
-      <ProfileEdit />
+      {user && <UserCard user={user} onProfileUpdate={handleProfileUpdate} />}
     </Box>
   )
 }

@@ -76,18 +76,36 @@ const editProfile = async (req, res) => {
     return res.status(401).json({ message: 'Invalid token' })
   }
 
-  const { userName, newPassword } = req.body
+  const { userName, currentPassword, newPassword, confirmPassword } = req.body
 
-  if (!userName && !newPassword) {
+  if (!userName && !currentPassword && !newPassword) {
     return res
       .status(400)
       .json({ message: 'Provide a new username or password!' })
+  }
+
+  if (newPassword && newPassword !== confirmPassword) {
+    return res
+      .status(400)
+      .json({ message: 'New password and confirm password do not match' })
   }
 
   try {
     const user = await User.findById(decoded.id)
     if (!user) {
       return res.status(404).json({ message: 'User not found!' })
+    }
+
+    if (currentPassword) {
+      const isMatch = await authService.comparePassword(
+        currentPassword,
+        user.password_digest
+      )
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ message: 'Current password is incorrect' })
+      }
     }
 
     if (userName) {
