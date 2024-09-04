@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './components/Profile'
+import VideoUpload from './components/VideoUpload'
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -38,6 +39,12 @@ const App = () => {
           path="/profile"
           element={
             isAuthenticated ? <Profile /> : <Login onLogin={handleLogin} />
+          }
+        />
+        <Route
+          path="/upload"
+          element={
+            isAuthenticated ? <VideoUpload /> : <Login onLogin={handleLogin} />
           }
         />
       </Routes>

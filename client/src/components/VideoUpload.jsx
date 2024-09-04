@@ -6,13 +6,19 @@ import {
   FormLabel,
   Input,
   VStack,
-  Text
+  Text,
+  Progress,
+  useToast
 } from '@chakra-ui/react'
 import { useDropzone } from 'react-dropzone'
+import axios from 'axios'
 
 const VideoUpload = ({ onUpload }) => {
   const [file, setFile] = useState(null)
   const [title, setTitle] = useState('')
+  const [uploading, setUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const toast = useToast()
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: 'video/*',
@@ -21,10 +27,48 @@ const VideoUpload = ({ onUpload }) => {
 
   const handleTitleChange = (event) => setTitle(event.target.value)
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     if (file && title) {
-      onUpload({ file, title })
+      setUploading(true)
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('title', title)
+
+      try {
+        await axios.post('http://localhost:5000/videos/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            )
+            setProgress(percentCompleted)
+          }
+        })
+        toast({
+          title: 'Upload successful.',
+          status: 'success',
+          duration: 2000,
+          isClosable: true
+        })
+      } catch (error) {
+        console.error('Error uploading video:', error)
+        toast({
+          title: 'Upload failed.',
+          description: 'There was an error uploading your video.',
+          status: 'error',
+          duration: 2000,
+          isClosable: true
+        })
+      } finally {
+        setUploading(false)
+        setFile(null)
+        setTitle('')
+        setProgress(0)
+      }
     }
   }
 
@@ -59,7 +103,12 @@ const VideoUpload = ({ onUpload }) => {
               )}
             </Box>
           </FormControl>
-          <Button type="submit" colorScheme="teal">
+          {uploading && (
+            <Box width="100%">
+              <Progress value={progress} colorScheme="teal" mb={4} />
+            </Box>
+          )}
+          <Button type="submit" colorScheme="teal" isLoading={uploading}>
             Upload Video
           </Button>
         </VStack>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Button, Flex, useToast } from '@chakra-ui/react'
 import {
@@ -6,7 +6,8 @@ import {
   AiOutlineLogin,
   AiOutlineUserAdd,
   AiOutlineLogout,
-  AiOutlineUser
+  AiOutlineUser,
+  AiOutlineUpload
 } from 'react-icons/ai'
 import { getToken, logout } from '../service/auth'
 
@@ -48,6 +49,18 @@ const NavBar = () => {
         >
           Home
         </Button>
+        {isLoggedIn && (
+          <Button
+            as={Link}
+            to="/upload"
+            colorScheme="blue"
+            variant="solid"
+            leftIcon={<AiOutlineUpload />}
+            mr={4}
+          >
+            Upload Video
+          </Button>
+        )}
       </Flex>
       <Flex>
         {!isLoggedIn && !isProfilePage && (
