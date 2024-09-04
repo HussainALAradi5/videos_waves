@@ -1,6 +1,16 @@
 const Video = require('../models/video')
-const mongoose = require('mongoose')
-const upload = async (req, res) => {
+const authService = require('../service/auth')
+const multer = require('multer')
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, '../../client/public/videos')
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`)
+  }
+})
+const upload = multer({ storage })
+const uploadVideo = async (req, res) => {
   const token = req.header('Authorization')?.replace('Bearer ', '')
   if (!token) {
     return res
@@ -109,7 +119,6 @@ const removeVideo = async (req, res) => {
       return res.status(404).json({ message: 'Video not found' })
     }
 
-    // Check if the logged-in user is the owner of the video
     if (video.userId.toString() !== decoded.id) {
       return res
         .status(403)
@@ -125,7 +134,7 @@ const removeVideo = async (req, res) => {
 }
 
 module.exports = {
-  upload,
+  uploadVideo,
   showRandomVideo,
   getVideoById,
   updateVideo,
