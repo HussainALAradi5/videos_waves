@@ -9,38 +9,44 @@ import {
   Button
 } from '@chakra-ui/react'
 import { AiOutlineLike, AiOutlinePlayCircle } from 'react-icons/ai'
-import axios from 'axios'
+import { likeVideo, unlikeVideo } from '../service/auth' // Adjust the import path as necessary
 
 const VideoCard = ({ video, onClick }) => {
   const [liked, setLiked] = useState(
     video.likedBy?.includes(localStorage.getItem('userId'))
   )
   const [numberOfLikes, setNumberOfLikes] = useState(video.numberOfLikes)
+  const [loading, setLoading] = useState(false) // To manage loading state
 
   const handleLikeClick = async () => {
-    const token = localStorage.getItem('token')
-    const url = `http://localhost:5000/videos/${video._id}/${
-      liked ? 'unlike' : 'like'
-    }`
+    if (loading) return // Prevent multiple clicks while loading
 
+    setLoading(true)
     try {
-      const response = await axios.post(
-        url,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      )
-
       if (liked) {
+        await unlikeVideo(video._id)
         setLiked(false)
         setNumberOfLikes((prev) => prev - 1)
       } else {
+        await likeVideo(video._id)
         setLiked(true)
         setNumberOfLikes((prev) => prev + 1)
       }
     } catch (error) {
-      console.error('Error liking/unliking video:', error)
+      // Log specific error messages based on the server response
+      if (error.response) {
+        if (error.response.data.message === 'Already liked') {
+          console.warn('You have already liked this video.')
+        } else if (error.response.data.message === 'Already unliked') {
+          console.warn('You have already unliked this video.')
+        } else {
+          console.error('Error liking/unliking video:', error.response.data)
+        }
+      } else {
+        console.error('Error liking/unliking video:', error.message)
+      }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -94,6 +100,7 @@ const VideoCard = ({ video, onClick }) => {
               colorScheme="teal"
               aria-label={liked ? 'Unlike' : 'Like'}
               onClick={handleLikeClick}
+              isLoading={loading} // Show loading state on button
             />
             <Text>{numberOfLikes}</Text>
           </HStack>

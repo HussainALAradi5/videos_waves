@@ -164,11 +164,6 @@ const likeVideo = async (req, res) => {
       video.likedBy = []
     }
 
-    // Check if the user has already liked the video
-    if (video.likedBy.includes(decoded.id)) {
-      return res.status(400).json({ message: 'Already liked' })
-    }
-
     video.likedBy.push(decoded.id)
     video.numberOfLikes += 1
 

@@ -15,6 +15,45 @@ const register = async (userData) => {
   }
 }
 
+const likeVideo = async (videoId) => {
+  const token = getToken()
+  if (!token) throw new Error('No token found')
+
+  try {
+    await axios.post(
+      `${API_URL}/videos/${videoId}/like`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    )
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message ||
+        'An error occurred while liking the video'
+    )
+  }
+}
+
+const unlikeVideo = async (videoId) => {
+  const token = getToken()
+  if (!token) throw new Error('No token found')
+
+  try {
+    await axios.post(
+      `${API_URL}/videos/${videoId}/unlike`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    )
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message ||
+        'An error occurred while unliking the video'
+    )
+  }
+}
 const updateProfile = async (profileData) => {
   const token = getToken()
   if (!token) throw new Error('No token found')
@@ -67,4 +106,13 @@ const getUserDetails = async () => {
   }
 }
 
-export { register, login, logout, getUserDetails, getToken, updateProfile }
+export {
+  register,
+  login,
+  logout,
+  getUserDetails,
+  getToken,
+  updateProfile,
+  likeVideo,
+  unlikeVideo
+}
