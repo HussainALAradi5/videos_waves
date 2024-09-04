@@ -30,16 +30,19 @@ const register = async (req, res) => {
 }
 
 const login = async (req, res) => {
-  const { email, userName, password } = req.body
+  const { usernameOrEmail, password } = req.body
+  console.log('req.body', req.body)
 
-  if (invalidData([email || userName, password])) {
+  if (!password || !usernameOrEmail) {
     return res.status(400).json({ message: 'You must fill all the fields!' })
   }
 
   try {
-    const user = await User.findOne({
-      $or: [{ email: email }, { userName: userName }]
-    })
+    const query = usernameOrEmail.includes('@')
+      ? { email: usernameOrEmail }
+      : { userName: usernameOrEmail }
+
+    const user = await User.findOne(query)
 
     if (!user) {
       return res.status(400).json({ error: 'Invalid credentials' })
@@ -60,6 +63,7 @@ const login = async (req, res) => {
     res.status(500).json({ error: 'Server error' })
   }
 }
+
 const editProfile = async (req, res) => {
   const token = req.header('Authorization')?.replace('Bearer ', '')
   if (!token) {
