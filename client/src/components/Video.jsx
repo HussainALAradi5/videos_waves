@@ -49,6 +49,15 @@ const Video = () => {
     }
   }
 
+  const handleVideoSelect = (video) => {
+    console.log('Selected Video:', video)
+    setSelectedVideo(video)
+  }
+
+  const handleBackToList = () => {
+    setSelectedVideo(null)
+  }
+
   return (
     <Container maxW="container.lg" p={4}>
       <VStack spacing={4}>
@@ -66,20 +75,28 @@ const Video = () => {
           <VideoUpload onUpload={handleVideoUpload} />
         ) : (
           <>
-            <Box>
-              {videos.length > 0 ? (
-                videos.map((video) => (
-                  <VideoCard
-                    key={video._id}
-                    video={video}
-                    onClick={() => setSelectedVideo(video)}
-                  />
-                ))
-              ) : (
-                <Text>No videos available.</Text>
-              )}
-            </Box>
-            {selectedVideo && <VideoDetails video={selectedVideo} />}
+            {!selectedVideo ? (
+              <Box>
+                {videos.length > 0 ? (
+                  videos.map((video) => (
+                    <VideoCard
+                      key={video._id}
+                      video={video}
+                      onClick={() => handleVideoSelect(video)}
+                    />
+                  ))
+                ) : (
+                  <Text>No videos available.</Text>
+                )}
+              </Box>
+            ) : (
+              <>
+                <Button colorScheme="teal" mb={4} onClick={handleBackToList}>
+                  Back to Video List
+                </Button>
+                <VideoDetails video={selectedVideo} />
+              </>
+            )}
           </>
         )}
       </VStack>

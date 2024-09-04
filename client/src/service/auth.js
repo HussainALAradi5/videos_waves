@@ -4,14 +4,21 @@ const API_URL = 'http://localhost:5000'
 
 const getToken = () => localStorage.getItem('token')
 
+const handleError = (error) => {
+  // Centralized error handling
+  const errorMessage =
+    error.response?.data?.message ||
+    error.message ||
+    'An unexpected error occurred'
+  throw new Error(errorMessage)
+}
+
 const register = async (userData) => {
   try {
     const response = await axios.post(`${API_URL}/user/register`, userData)
     return response.data
   } catch (error) {
-    throw new Error(
-      error.response?.data?.message || 'An error occurred during registration'
-    )
+    handleError(error)
   }
 }
 
@@ -28,10 +35,7 @@ const likeVideo = async (videoId) => {
       }
     )
   } catch (error) {
-    throw new Error(
-      error.response?.data?.message ||
-        'An error occurred while liking the video'
-    )
+    handleError(error)
   }
 }
 
@@ -48,12 +52,10 @@ const unlikeVideo = async (videoId) => {
       }
     )
   } catch (error) {
-    throw new Error(
-      error.response?.data?.message ||
-        'An error occurred while unliking the video'
-    )
+    handleError(error)
   }
 }
+
 const updateProfile = async (profileData) => {
   const token = getToken()
   if (!token) throw new Error('No token found')
@@ -64,10 +66,7 @@ const updateProfile = async (profileData) => {
     })
     return response.data
   } catch (error) {
-    throw new Error(
-      error.response?.data?.message ||
-        'An error occurred while updating profile'
-    )
+    handleError(error)
   }
 }
 
@@ -79,9 +78,7 @@ const login = async (userData) => {
     }
     return response.data
   } catch (error) {
-    throw new Error(
-      error.response?.data?.message || 'An error occurred during login'
-    )
+    handleError(error)
   }
 }
 
@@ -99,76 +96,63 @@ const getUserDetails = async () => {
     })
     return response.data
   } catch (error) {
-    throw new Error(
-      error.response?.data?.message ||
-        'An error occurred while fetching user details'
-    )
+    handleError(error)
   }
 }
+
 const addComment = async (videoId, comment) => {
+  const token = getToken()
+  if (!token) throw new Error('No token found')
+
   try {
-    const token = localStorage.getItem('token')
     const response = await axios.post(
       `${API_URL}/videos/${videoId}/comments`,
       { comment },
       {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        headers: { Authorization: `Bearer ${token}` }
       }
     )
     return response.data
   } catch (error) {
-    console.error(
-      'Error adding comment:',
-      error.response ? error.response.data : error.message
-    )
-    throw error
+    handleError(error)
   }
 }
 
 const editComment = async (videoId, commentId, updatedComment) => {
+  const token = getToken()
+  if (!token) throw new Error('No token found')
+
   try {
-    const token = localStorage.getItem('token')
     const response = await axios.put(
       `${API_URL}/videos/${videoId}/comments/${commentId}`,
       { comment: updatedComment },
       {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        headers: { Authorization: `Bearer ${token}` }
       }
     )
     return response.data
   } catch (error) {
-    console.error(
-      'Error editing comment:',
-      error.response ? error.response.data : error.message
-    )
-    throw error
+    handleError(error)
   }
 }
 
 const removeComment = async (videoId, commentId) => {
+  const token = getToken()
+  if (!token) throw new Error('No token found')
+
   try {
-    const token = localStorage.getItem('token')
     const response = await axios.delete(
       `${API_URL}/videos/${videoId}/comments/${commentId}`,
       {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        headers: { Authorization: `Bearer ${token}` }
       }
     )
     return response.data
   } catch (error) {
-    console.error(
-      'Error removing comment:',
-      error.response ? error.response.data : error.message
-    )
-    throw error
+    handleError(error)
   }
 }
+
 export {
   register,
   login,

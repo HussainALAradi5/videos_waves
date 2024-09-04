@@ -74,7 +74,7 @@ const VideoUpload = ({ onUpload }) => {
         }
       )
 
-      console.log('Upload response:', response.data) // Debugging line
+      console.log('Upload response:', response.data)
 
       toast({
         title: 'Upload successful.',
@@ -84,10 +84,10 @@ const VideoUpload = ({ onUpload }) => {
       })
 
       if (onUpload) {
-        onUpload(response.data) // Notify parent component of successful upload
+        onUpload(response.data)
       }
     } catch (error) {
-      console.error('Error uploading video:', error.response?.data || error) // Improved error logging
+      console.error('Error uploading video:', error.response?.data || error)
 
       toast({
         title: 'Upload failed.',

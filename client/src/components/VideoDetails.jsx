@@ -1,14 +1,24 @@
-import { Box, Text, VStack } from '@chakra-ui/react'
+import { Box, Image, Text, VStack, Button } from '@chakra-ui/react'
+import Comments from './Comments'
 
 const VideoDetails = ({ video }) => {
+  if (!video) return null
+
   return (
-    <Box p={4} borderWidth={1} borderRadius="md">
-      <VStack spacing={4}>
-        <Text fontSize="lg" fontWeight="bold">
+    <Box>
+      <Image
+        src={video.thumbnailUrl}
+        alt={video.title}
+        boxSize="full"
+        objectFit="cover"
+        mb={4}
+      />
+      <VStack spacing={4} align="start">
+        <Text fontWeight="bold" fontSize="2xl">
           {video.title}
         </Text>
-        <Text>Likes: {video.numberOfLikes}</Text>
-        <Text>Views: {video.numberOfViews}</Text>
+        <Text>{video.description}</Text>
+        <Comments videoId={video._id} userId={localStorage.getItem('userId')} />
       </VStack>
     </Box>
   )
