@@ -1,11 +1,19 @@
-import { Box, Heading } from '@chakra-ui/react'
+import React from 'react'
+import { Container, Grid, Heading } from '@chakra-ui/react'
+import VideoCard from '../components/VideoCard'
 
-const Home = () => {
+const HomePage = () => {
   return (
-    <Box>
-      <Heading>Welcome to the Video Platform</Heading>
-    </Box>
+    <Container maxW="container.xl" p={4}>
+      <Heading mb={6}>Trending Videos</Heading>
+      <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={6}>
+        <VideoCard />
+        <VideoCard />
+        <VideoCard />
+        <VideoCard />
+      </Grid>
+    </Container>
   )
 }
 
-export default Home
+export default HomePage
