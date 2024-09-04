@@ -105,7 +105,70 @@ const getUserDetails = async () => {
     )
   }
 }
+const addComment = async (videoId, comment) => {
+  try {
+    const token = localStorage.getItem('token')
+    const response = await axios.post(
+      `${API_URL}/videos/${videoId}/comments`,
+      { comment },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+    return response.data
+  } catch (error) {
+    console.error(
+      'Error adding comment:',
+      error.response ? error.response.data : error.message
+    )
+    throw error
+  }
+}
 
+const editComment = async (videoId, commentId, updatedComment) => {
+  try {
+    const token = localStorage.getItem('token')
+    const response = await axios.put(
+      `${API_URL}/videos/${videoId}/comments/${commentId}`,
+      { comment: updatedComment },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+    return response.data
+  } catch (error) {
+    console.error(
+      'Error editing comment:',
+      error.response ? error.response.data : error.message
+    )
+    throw error
+  }
+}
+
+const removeComment = async (videoId, commentId) => {
+  try {
+    const token = localStorage.getItem('token')
+    const response = await axios.delete(
+      `${API_URL}/videos/${videoId}/comments/${commentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+    return response.data
+  } catch (error) {
+    console.error(
+      'Error removing comment:',
+      error.response ? error.response.data : error.message
+    )
+    throw error
+  }
+}
 export {
   register,
   login,
@@ -114,5 +177,8 @@ export {
   getToken,
   updateProfile,
   likeVideo,
-  unlikeVideo
+  unlikeVideo,
+  addComment,
+  editComment,
+  removeComment
 }

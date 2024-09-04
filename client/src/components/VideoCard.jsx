@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Box,
   Image,
@@ -9,19 +9,21 @@ import {
   Button
 } from '@chakra-ui/react'
 import { AiOutlineLike, AiOutlinePlayCircle } from 'react-icons/ai'
-import { likeVideo, unlikeVideo } from '../service/auth' // Adjust the import path as necessary
+import { likeVideo, unlikeVideo } from '../service/auth'
+import Comments from './Comments'
 
 const VideoCard = ({ video, onClick }) => {
   const [liked, setLiked] = useState(
     video.likedBy?.includes(localStorage.getItem('userId'))
   )
   const [numberOfLikes, setNumberOfLikes] = useState(video.numberOfLikes)
-  const [loading, setLoading] = useState(false) // To manage loading state
+  const [userId, setUserId] = useState(localStorage.getItem('userId'))
+
+  useEffect(() => {
+    // Any additional logic on component mount
+  }, [video._id])
 
   const handleLikeClick = async () => {
-    if (loading) return // Prevent multiple clicks while loading
-
-    setLoading(true)
     try {
       if (liked) {
         await unlikeVideo(video._id)
@@ -33,20 +35,10 @@ const VideoCard = ({ video, onClick }) => {
         setNumberOfLikes((prev) => prev + 1)
       }
     } catch (error) {
-      // Log specific error messages based on the server response
-      if (error.response) {
-        if (error.response.data.message === 'Already liked') {
-          console.warn('You have already liked this video.')
-        } else if (error.response.data.message === 'Already unliked') {
-          console.warn('You have already unliked this video.')
-        } else {
-          console.error('Error liking/unliking video:', error.response.data)
-        }
-      } else {
-        console.error('Error liking/unliking video:', error.message)
-      }
-    } finally {
-      setLoading(false)
+      console.error(
+        'Error liking/unliking video:',
+        error.response ? error.response.data : error.message
+      )
     }
   }
 
@@ -58,38 +50,24 @@ const VideoCard = ({ video, onClick }) => {
       borderWidth={1}
       borderRadius="lg"
       overflow="hidden"
-      onClick={onClick}
       cursor="pointer"
-      _hover={{
-        boxShadow: '2xl',
-        transition: '1.5s'
-      }}
+      _hover={{ boxShadow: 'lg', transform: 'scale(1.03)', transition: '0.3s' }}
       bg="gray.800"
       color="white"
       position="relative"
-      width="400px"
-      height="400px"
+      width="100%"
+      maxW="400px"
     >
       <Image
         src={thumbnailUrl}
         alt={title}
         boxSize="full"
         objectFit="cover"
-        height="75%"
-        width="100%"
+        height="250px"
         borderTopRadius="lg"
       />
-      <VStack
-        p={4}
-        spacing={2}
-        align="start"
-        position="absolute"
-        bottom={0}
-        left={0}
-        right={0}
-        bgGradient="linear(to-t, blackAlpha.700, transparent)"
-      >
-        <Text fontWeight="bold" fontSize="xl">
+      <VStack p={4} spacing={2} align="start">
+        <Text fontWeight="bold" fontSize="lg" noOfLines={1}>
           {title}
         </Text>
         <HStack spacing={4} w="full" justify="space-between">
@@ -100,7 +78,6 @@ const VideoCard = ({ video, onClick }) => {
               colorScheme="teal"
               aria-label={liked ? 'Unlike' : 'Like'}
               onClick={handleLikeClick}
-              isLoading={loading} // Show loading state on button
             />
             <Text>{numberOfLikes}</Text>
           </HStack>
@@ -113,6 +90,7 @@ const VideoCard = ({ video, onClick }) => {
             Play
           </Button>
         </HStack>
+        <Comments videoId={video._id} userId={userId} />
       </VStack>
     </Box>
   )
