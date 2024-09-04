@@ -14,7 +14,7 @@
 
 #### this project is small and project to give mimic the behaviour of the TikTok and have some minor tweaks to learn new skills .
 
-#### [project]:TBA
+#### [project]:Videos Waves
 
 ---
 
