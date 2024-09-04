@@ -49,10 +49,6 @@ const VideoCard = ({ video }) => {
     }
   }
 
-  const handleCommentClick = (event) => {
-    event.stopPropagation()
-  }
-
   const handlePlayClick = (event) => {
     event.stopPropagation()
     onOpen()
@@ -60,7 +56,7 @@ const VideoCard = ({ video }) => {
 
   const thumbnailUrl = video?.thumbnailUrl || 'default-thumbnail.png'
   const title = video?.title || 'Untitled Video'
-  const videoUrl = video?.videoUrl || '' // Make sure `videoUrl` is provided in the video object
+  const videoUrl = video?.videoUrl || ''
 
   return (
     <>
@@ -118,7 +114,6 @@ const VideoCard = ({ video }) => {
         </VStack>
       </Box>
 
-      {/* Modal for playing video */}
       <Modal isOpen={isOpen} onClose={onClose} size="full">
         <ModalOverlay />
         <ModalContent>
