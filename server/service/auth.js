@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 require('dotenv').config()
 
 const JWT_SECRET = process.env.JWT_SECRET
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d'
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h'
 
 const hashPassword = async (password) => {
   const salt = await bcrypt.genSalt(parseInt(process.env.Salt_Rounds))
@@ -27,10 +27,26 @@ const verifyToken = (token) => {
     return null
   }
 }
+const authenticate = (req, res, next) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '')
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Authorization denied, no token provided' })
+  }
 
+  const decoded = verifyToken(token)
+  if (!decoded) {
+    return res.status(401).json({ message: 'Invalid token' })
+  }
+
+  req.user = decoded
+  next()
+}
 module.exports = {
   hashPassword,
   comparePassword,
   generateToken,
-  verifyToken
+  verifyToken,
+  authenticate
 }

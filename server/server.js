@@ -5,10 +5,13 @@ const dotenv = require('dotenv')
 dotenv.config()
 const port = process.env.PORT || 5000
 const db = require('./config/db')
+const userRoutes = require('./routes/user')
+const videoRoutes = require('./routes/video')
 app.use(express.json())
 app.use(cors())
 const connect = db.connectDB()
-
+app.use('/user', userRoutes)
+app.use('/videos', videoRoutes)
 app.listen(port, () => {
   connect
   console.log(`server start at http://localhost:${port}`)

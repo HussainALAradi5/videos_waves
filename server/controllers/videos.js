@@ -1,31 +1,47 @@
 const Video = require('../models/video')
 const mongoose = require('mongoose')
 const upload = async (req, res) => {
-  try {
-    const { title, userId } = req.body
+  const token = req.header('Authorization')?.replace('Bearer ', '')
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Authorization denied, no token provided' })
+  }
 
-    const video = new Video({
+  const decoded = authService.verifyToken(token)
+  if (!decoded) {
+    return res.status(401).json({ message: 'Invalid token' })
+  }
+
+  try {
+    const { title } = req.body
+    const userId = decoded.id
+
+    const newVideo = new Video({
       title,
       userId,
       numberOfLikes: 0,
       numberOfViews: 0,
       comments: []
     })
-    await video.save()
-    res.status(201).json(video)
+
+    await newVideo.save()
+    res.status(201).json(newVideo)
   } catch (error) {
-    res.status(500).json({ massege: 'some technical issuse' })
+    console.error(error)
+    res.status(500).json({ error: 'Server error while uploading video' })
   }
 }
+
 const showRandomVideo = async (req, res) => {
   try {
-    const count = await Video.countDocuemnts()
-    const random = Main.floor(Math.random() * count)
+    const count = await Video.countDocuments()
+    const random = Math.floor(Math.random() * count)
     const video = await Video.findOne().skip(random).populate('userId')
     res.status(200).json(video)
   } catch (error) {
     console.error(error)
-    res.status(500).json({ massege: 'cant show random video' })
+    res.status(500).json({ message: "Can't show random video" })
   }
 }
 const getVideoById = async (req, res) => {
@@ -40,28 +56,74 @@ const getVideoById = async (req, res) => {
   }
 }
 const updateVideo = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '')
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Authorization denied, no token provided' })
+  }
+
+  const decoded = authService.verifyToken(token)
+  if (!decoded) {
+    return res.status(401).json({ message: 'Invalid token' })
+  }
+
   try {
-    const { id } = req.params
-    const video = await Video.findByIdAndUpdate(id, req.body)
-    if (!video) return res.stauts(404).json({ massege: 'Video is not exist!' })
-    return res.status(200).json(video)
+    const video = await Video.findById(req.params.id)
+    if (!video) {
+      return res.status(404).json({ message: 'Video not found' })
+    }
+
+    if (video.userId.toString() !== decoded.id) {
+      return res
+        .status(403)
+        .json({ message: 'Unauthorized to update this video' })
+    }
+
+    Object.assign(video, req.body)
+    await video.save()
+
+    res.status(200).json(video)
   } catch (error) {
     console.error(error)
-    res.status(500).json({ massege: 'cant update the video details' })
+    res.status(500).json({ error: 'Server error while updating video' })
   }
 }
+
 const removeVideo = async (req, res) => {
-  try {
-    const { id } = req.params
-    const video = await Video.findByIdAndDelete(id)
-    if (!video) return res.stauts(404).json({ massege: 'Video is not exist!' })
+  const token = req.header('Authorization')?.replace('Bearer ', '')
+  if (!token) {
     return res
-      .status(200)
-      .json({ massege: 'Video have been deleted successfully' })
+      .status(401)
+      .json({ message: 'Authorization denied, no token provided' })
+  }
+
+  const decoded = authService.verifyToken(token)
+  if (!decoded) {
+    return res.status(401).json({ message: 'Invalid token' })
+  }
+
+  try {
+    const video = await Video.findById(req.params.id)
+    if (!video) {
+      return res.status(404).json({ message: 'Video not found' })
+    }
+
+    // Check if the logged-in user is the owner of the video
+    if (video.userId.toString() !== decoded.id) {
+      return res
+        .status(403)
+        .json({ message: 'Unauthorized to delete this video' })
+    }
+
+    await video.remove()
+    res.status(200).json({ message: 'Video deleted successfully' })
   } catch (error) {
-    res.stauts(500).json({ massege: 'cant delete the video' })
+    console.error(error)
+    res.status(500).json({ error: 'Server error while deleting video' })
   }
 }
+
 module.exports = {
   upload,
   showRandomVideo,

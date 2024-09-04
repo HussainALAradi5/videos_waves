@@ -62,18 +62,28 @@ const login = async (req, res) => {
   }
 }
 const editProfile = async (req, res) => {
-  const { userId } = req.user
+  const token = req.header('Authorization')?.replace('Bearer ', '')
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Authorization denied, no token provided' })
+  }
+
+  const decoded = authService.verifyToken(token)
+  if (!decoded) {
+    return res.status(401).json({ message: 'Invalid token' })
+  }
+
   const { userName, newPassword } = req.body
 
-  // Check if at least one field is provided
   if (!userName && !newPassword) {
     return res
       .status(400)
-      .json({ message: 'You must provide a new username or password!' })
+      .json({ message: 'Provide a new username or password!' })
   }
 
   try {
-    const user = await User.findById(userId)
+    const user = await User.findById(decoded.id)
     if (!user) {
       return res.status(404).json({ message: 'User not found!' })
     }
@@ -83,29 +93,62 @@ const editProfile = async (req, res) => {
     }
 
     if (newPassword) {
-      const hashedPassword = await authService.hashPassword(newPassword)
-      user.password_digest = hashedPassword
+      user.password_digest = await authService.hashPassword(newPassword)
     }
 
     await user.save()
-    res.json({ message: 'Profile updated successfully!' })
+    res.json({ message: 'Profile updated successfully' })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
   }
 }
+
 const deleteUser = async (req, res) => {
-  const { userId } = req.user
+  const token = req.header('Authorization')?.replace('Bearer ', '')
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Authorization denied, no token provided' })
+  }
+
+  const decoded = authService.verifyToken(token)
+  if (!decoded) {
+    return res.status(401).json({ message: 'Invalid token' })
+  }
 
   try {
-    // Find the user by ID and update the 'isActive' field
-    const user = await User.findByIdAndUpdate(userId, { isActive: false })
+    const user = await User.findByIdAndUpdate(decoded.id, { isActive: false })
 
     if (!user) {
       return res.status(404).json({ message: 'User not found!' })
     }
 
-    res.json({ message: 'User marked as inactive successfully!' })
+    res.json({ message: 'User deactivated successfully' })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Server error' })
+  }
+}
+const getUserDetails = async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '')
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Authorization denied, no token provided' })
+  }
+
+  const decoded = authService.verifyToken(token)
+  if (!decoded) {
+    return res.status(401).json({ message: 'Invalid token' })
+  }
+
+  try {
+    const user = await User.findById(decoded.id).select('-password_digest')
+    if (!user) {
+      return res.status(404).json({ message: 'User not found!' })
+    }
+    res.json(user)
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -116,5 +159,6 @@ module.exports = {
   register,
   login,
   editProfile,
-  deleteUser
+  deleteUser,
+  getUserDetails
 }

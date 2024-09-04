@@ -5,7 +5,7 @@ const adminRequestSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
-    dateOfRequest: { type: Data },
+    dateOfRequest: { type: Date, default: Date.now },
     reason: {
       type: String,
       required: true
