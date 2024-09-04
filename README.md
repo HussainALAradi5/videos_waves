@@ -31,6 +31,8 @@
 
 ### **_Getting Started_**
 
+unfortuantly i was aiming to make it usable and make it with link 😞 but dont worry i will give you small demo to the frontend and the backend you must do it locally
+
 #####
 
 ## 1. create .env file inside the server
@@ -42,6 +44,11 @@
 - PORT=5000 (number of the port)
 
 ## 2. npm i in both client and server
+
+## 3. open 2 terminal one for the client and one for the server
+
+- for server: nodemon server.js
+- for client: npm run dev
 
 ---
 
