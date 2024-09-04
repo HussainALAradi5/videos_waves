@@ -29,14 +29,38 @@ const VideoUpload = ({ onUpload }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    if (file && title) {
-      setUploading(true)
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('title', title)
+    if (!file) {
+      toast({
+        title: 'No file selected.',
+        description: 'Please select a video file to upload.',
+        status: 'warning',
+        duration: 2000,
+        isClosable: true
+      })
+      return
+    }
 
-      try {
-        await axios.post('http://localhost:5000/videos/upload', formData, {
+    if (!title.trim()) {
+      toast({
+        title: 'Title is required.',
+        description: 'Please enter a title for the video.',
+        status: 'warning',
+        duration: 2000,
+        isClosable: true
+      })
+      return
+    }
+
+    setUploading(true)
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('title', title)
+
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/videos/upload',
+        formData,
+        {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -47,28 +71,38 @@ const VideoUpload = ({ onUpload }) => {
             )
             setProgress(percentCompleted)
           }
-        })
-        toast({
-          title: 'Upload successful.',
-          status: 'success',
-          duration: 2000,
-          isClosable: true
-        })
-      } catch (error) {
-        console.error('Error uploading video:', error)
-        toast({
-          title: 'Upload failed.',
-          description: 'There was an error uploading your video.',
-          status: 'error',
-          duration: 2000,
-          isClosable: true
-        })
-      } finally {
-        setUploading(false)
-        setFile(null)
-        setTitle('')
-        setProgress(0)
+        }
+      )
+
+      console.log('Upload response:', response.data) // Debugging line
+
+      toast({
+        title: 'Upload successful.',
+        status: 'success',
+        duration: 2000,
+        isClosable: true
+      })
+
+      if (onUpload) {
+        onUpload(response.data) // Notify parent component of successful upload
       }
+    } catch (error) {
+      console.error('Error uploading video:', error.response?.data || error) // Improved error logging
+
+      toast({
+        title: 'Upload failed.',
+        description:
+          error.response?.data?.message ||
+          'There was an error uploading your video.',
+        status: 'error',
+        duration: 2000,
+        isClosable: true
+      })
+    } finally {
+      setUploading(false)
+      setFile(null)
+      setTitle('')
+      setProgress(0)
     }
   }
 

@@ -9,7 +9,6 @@ const VideoDetails = ({ video }) => {
         </Text>
         <Text>Likes: {video.numberOfLikes}</Text>
         <Text>Views: {video.numberOfViews}</Text>
-        {/* Add video player here */}
       </VStack>
     </Box>
   )

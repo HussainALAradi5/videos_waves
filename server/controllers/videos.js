@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}_${file.originalname}`)
   }
 })
-const upload = multer({ storage })
+multer({ storage })
 const uploadVideo = async (req, res) => {
   const token = req.header('Authorization')?.replace('Bearer ', '')
   if (!token) {
@@ -132,11 +132,20 @@ const removeVideo = async (req, res) => {
     res.status(500).json({ error: 'Server error while deleting video' })
   }
 }
-
+const getAllVideos = async (req, res) => {
+  try {
+    const videos = await Video.find().populate('userId')
+    res.status(200).json(videos)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Error fetching videos' })
+  }
+}
 module.exports = {
   uploadVideo,
   showRandomVideo,
   getVideoById,
   updateVideo,
-  removeVideo
+  removeVideo,
+  getAllVideos
 }
