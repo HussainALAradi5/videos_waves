@@ -110,7 +110,7 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 #### 3. Dark mode:
 
-![video](./darkMode.gif.gif)
+![video](./darkMode.gif)
 
 ### **_Future Updates_**
 
