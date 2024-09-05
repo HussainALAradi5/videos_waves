@@ -4,11 +4,13 @@ import {
   Button,
   Input,
   VStack,
-  useBreakpointValue
+  useBreakpointValue,
+  useColorMode
 } from '@chakra-ui/react'
 
 const Form = ({ fields, onSubmit, buttonText }) => {
   const [formData, setFormData] = useState({})
+  const { colorMode } = useColorMode()
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value })
@@ -36,8 +38,9 @@ const Form = ({ fields, onSubmit, buttonText }) => {
       borderWidth={1}
       borderRadius="md"
       boxShadow="md"
-      bg="blue.50"
+      bg={colorMode === 'light' ? 'blue.50' : 'gray.800'}
       width={containerWidth}
+      borderColor={colorMode === 'light' ? 'blue.200' : 'gray.600'}
     >
       <VStack spacing={4} align="stretch">
         {fields.map((field) => (
@@ -49,9 +52,11 @@ const Form = ({ fields, onSubmit, buttonText }) => {
               onChange={handleChange}
               required={field.required}
               variant="filled"
-              bg="white"
-              _placeholder={{ color: 'gray.500' }}
-              value={formData[field.name] || ''} // Ensure value is controlled
+              bg={colorMode === 'light' ? 'white' : 'gray.700'}
+              _placeholder={{
+                color: colorMode === 'light' ? 'gray.500' : 'gray.400'
+              }}
+              value={formData[field.name] || ''}
             />
           </Box>
         ))}
