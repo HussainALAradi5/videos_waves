@@ -1,13 +1,23 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Button, Flex, useToast, Box, Text } from '@chakra-ui/react'
+import {
+  Button,
+  Flex,
+  useToast,
+  Box,
+  Text,
+  useColorMode,
+  IconButton
+} from '@chakra-ui/react'
 import {
   AiOutlineHome,
   AiOutlineLogin,
   AiOutlineUserAdd,
   AiOutlineLogout,
   AiOutlineUser,
-  AiOutlineUpload
+  AiOutlineUpload,
+  AiOutlineSun,
+  AiOutlineMoon
 } from 'react-icons/ai'
 import { getToken, logout } from '../service/auth'
 
@@ -16,6 +26,7 @@ const NavBar = () => {
   const navigate = useNavigate()
   const toast = useToast()
   const location = useLocation()
+  const { colorMode, toggleColorMode } = useColorMode()
 
   useEffect(() => {
     const token = getToken()
@@ -37,7 +48,12 @@ const NavBar = () => {
   const isProfilePage = location.pathname === '/profile'
 
   return (
-    <Box bg="cyan.500" p={4} position="relative" overflow="hidden">
+    <Box
+      bg={colorMode === 'light' ? 'cyan.500' : 'cyan.800'}
+      p={4}
+      position="relative"
+      overflow="hidden"
+    >
       <Flex
         justify="space-between"
         align="center"
@@ -51,7 +67,7 @@ const NavBar = () => {
           <Button
             as={Link}
             to="/"
-            colorScheme="blue"
+            colorScheme={colorMode === 'light' ? 'blue' : 'teal'}
             variant="solid"
             leftIcon={<AiOutlineHome />}
             mr={4}
@@ -62,7 +78,7 @@ const NavBar = () => {
             <Button
               as={Link}
               to="/upload"
-              colorScheme="blue"
+              colorScheme={colorMode === 'light' ? 'blue' : 'teal'}
               variant="solid"
               leftIcon={<AiOutlineUpload />}
               mr={4}
@@ -71,13 +87,19 @@ const NavBar = () => {
             </Button>
           )}
         </Flex>
-        <Flex>
+        <Flex align="center">
+          <IconButton
+            icon={colorMode === 'light' ? <AiOutlineMoon /> : <AiOutlineSun />}
+            aria-label="Toggle Color Mode"
+            onClick={toggleColorMode}
+            mr={4}
+          />
           {!isLoggedIn && !isProfilePage && (
             <>
               <Button
                 as={Link}
                 to="/register"
-                colorScheme="blue"
+                colorScheme={colorMode === 'light' ? 'blue' : 'teal'}
                 variant="solid"
                 leftIcon={<AiOutlineUserAdd />}
                 mr={4}
@@ -87,7 +109,7 @@ const NavBar = () => {
               <Button
                 as={Link}
                 to="/login"
-                colorScheme="blue"
+                colorScheme={colorMode === 'light' ? 'blue' : 'teal'}
                 variant="solid"
                 leftIcon={<AiOutlineLogin />}
               >
@@ -100,7 +122,7 @@ const NavBar = () => {
               <Button
                 as={Link}
                 to="/profile"
-                colorScheme="blue"
+                colorScheme={colorMode === 'light' ? 'blue' : 'teal'}
                 variant="solid"
                 leftIcon={<AiOutlineUser />}
                 mr={4}
@@ -125,7 +147,7 @@ const NavBar = () => {
         left="0"
         width="100%"
         height="100px"
-        bg="cyan.600"
+        bg={colorMode === 'light' ? 'cyan.600' : 'cyan.900'}
         transform="skewY(-6deg)"
         zIndex={0}
       />

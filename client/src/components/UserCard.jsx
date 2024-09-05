@@ -1,21 +1,29 @@
 import { useState } from 'react'
-import { Box, Text, Avatar, VStack, Button } from '@chakra-ui/react'
+import {
+  Box,
+  Text,
+  Avatar,
+  VStack,
+  Button,
+  useColorMode,
+  useToast
+} from '@chakra-ui/react'
 import ProfileEdit from './ProfileEdit'
-import { useToast } from '@chakra-ui/react'
 
 const UserCard = ({ user, onProfileUpdate }) => {
   const [isEditing, setIsEditing] = useState(false)
+  const { colorMode } = useColorMode()
   const toast = useToast()
 
   const handleProfileUpdate = async () => {
     try {
-      ;(await onProfileUpdate()) /
-        toast({
-          title: 'Profile updated.',
-          status: 'success',
-          duration: 2000,
-          isClosable: true
-        })
+      await onProfileUpdate()
+      toast({
+        title: 'Profile updated.',
+        status: 'success',
+        duration: 2000,
+        isClosable: true
+      })
     } catch (error) {
       toast({
         title: 'Error updating profile.',
@@ -31,17 +39,18 @@ const UserCard = ({ user, onProfileUpdate }) => {
       borderWidth="1px"
       borderRadius="lg"
       p={4}
-      bg="white"
+      bg={colorMode === 'light' ? 'white' : 'gray.700'}
       boxShadow="lg"
       maxW="md"
       mx="auto"
+      borderColor={colorMode === 'light' ? 'gray.200' : 'gray.600'}
     >
       <VStack spacing={4} align="center">
         <Avatar
           name={user.userName}
           src={user.image}
           size="xl"
-          borderColor="black.200"
+          borderColor={colorMode === 'light' ? 'gray.200' : 'gray.600'}
           borderWidth="2px"
         />
         {isEditing ? (
@@ -55,12 +64,22 @@ const UserCard = ({ user, onProfileUpdate }) => {
           />
         ) : (
           <Box>
-            <Text fontWeight="bold" fontSize="xl">
+            <Text
+              fontWeight="bold"
+              fontSize="xl"
+              color={colorMode === 'light' ? 'gray.800' : 'gray.200'}
+            >
               Username: {user.userName}
             </Text>
-            <Text>Email: {user.email}</Text>
-            <Text>Admin: {user.isAdmin ? 'Yes' : 'No'}</Text>
-            <Text>User Status: {user.isActive ? 'Active' : 'Inactive'}</Text>
+            <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+              Email: {user.email}
+            </Text>
+            <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+              Admin: {user.isAdmin ? 'Yes' : 'No'}
+            </Text>
+            <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+              User Status: {user.isActive ? 'Active' : 'Inactive'}
+            </Text>
             <Button
               mt={4}
               colorScheme="blue"

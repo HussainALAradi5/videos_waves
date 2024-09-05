@@ -62,6 +62,18 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ---
 
+## Features:
+
+1. you can upload videos( with using drag & drop) [x]
+2. you have infinite scroll [x]
+3. you can comment [](WIP)
+4. you can like or dislike videos [x]
+5. you can register and login [x]
+6. auth for our clients [x]😁
+7. the user is able to update his profile details:userName,email,password [x]
+
+---
+
 ### **_Screenshots_**
 
 ##### intro
@@ -72,7 +84,7 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 #### animated showcase:
 
-![video]:TBA
+![video](./upload.gif)
 
 ### **_Future Updates_**
 
