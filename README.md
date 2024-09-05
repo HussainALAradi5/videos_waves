@@ -126,7 +126,7 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ##### 2. [Chakra UI](https://v2.chakra-ui.com/) for the nice UX and responisve UI🌊
 
-##### inspired by:The Populer TikTok
+##### our nice website inspired by:The Populer [TikTok] (https://www.tiktok.com/en/)
 
 ---
 
