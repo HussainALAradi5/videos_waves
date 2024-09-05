@@ -74,27 +74,27 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ---
 
-### **_Screenshots_**
+## **_Screenshots_**
 
-#### showcase:
+### showcase:
 
-1. ##### homepage: ![showcase](./homePage.png)
-
----
-
-2. ##### login: ![showcase](./login.png)
+1. #### homepage: ![showcase](./homePage.png)
 
 ---
 
-3. ##### register: ![showcase](./regsiter.png)
+2. #### login: ![showcase](./login.png)
 
 ---
 
-4. ##### register: ![showcase](./upload.png)
+3. #### register: ![showcase](./regsiter.png)
 
 ---
 
-5. ##### register: ![showcase](./Dark%20mode.png)
+4. #### register: ![showcase](./upload.png)
+
+---
+
+5. #### register: ![showcase](./Dark%20mode.png)
 
 ---
 
