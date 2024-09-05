@@ -90,11 +90,11 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ---
 
-4. #### register: ![showcase](./upload.png)
+4. #### upload files by drag and drop: ![showcase](./upload.png)
 
 ---
 
-5. #### register: ![showcase](./Dark%20mode.png)
+5. #### dark mode showcase: ![showcase](./Dark%20mode.png)
 
 ---
 
