@@ -35,7 +35,7 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 #####
 
-### 1. create .env file inside the server
+### 1. create .env file inside the server and insert the following codes 😊
 
 ```
 - MONGO_URI=mongodb+srv://UserName:Password@cluster0.tfs0iql.mongodb.net/videos_waves
