@@ -82,9 +82,39 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 #### showcase:
 
+1. ##### homepage: ![showcase](./homePage.png)
+
+---
+
+2. ##### login: ![showcase](./login.png)
+
+---
+
+3. ##### register: ![showcase](./regsiter.png)
+
+---
+
+4. ##### register: ![showcase](./upload.png)
+
+---
+
+5. ##### register: ![showcase](./Dark%20mode.png)
+
+---
+
 #### animated showcase:
 
+#### 1. upload:
+
 ![video](./upload.gif)
+
+#### 2. auth:
+
+![video](./auth.gif)
+
+#### 3. Dark mode:
+
+![video](./darkMode.gif.gif)
 
 ### **_Future Updates_**
 
