@@ -76,10 +76,6 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ### **_Screenshots_**
 
-##### intro
-
-![intro]:TBA
-
 #### showcase:
 
 1. ##### homepage: ![showcase](./homePage.png)
