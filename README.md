@@ -122,7 +122,9 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ### **_Credits_**
 
-##### google for images and videos,[Chakra UI](https://v2.chakra-ui.com/)
+##### 1. google for images and videos
+
+#### 2. [Chakra UI](https://v2.chakra-ui.com/) for the nice UX and responisve UI🌊
 
 ##### inspired by:The Populer TikTok
 
