@@ -35,7 +35,7 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 #####
 
-## 1. create .env file inside the server
+### 1. create .env file inside the server
 
 ```
 - MONGO_URI=mongodb+srv://UserName:Password@cluster0.tfs0iql.mongodb.net/videos_waves
@@ -45,9 +45,9 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 - PORT=5000 (number of the port)
 ```
 
-## 2. npm i in both client and server to install the dependencies and packages...etc
+### 2. npm i in both client and server to install the dependencies and packages...etc
 
-## 3. open 2 terminal one for the client and one for the server
+### 3. open 2 terminal one for the client and one for the server
 
 - for server: nodemon server.js
 - for client: npm run dev
