@@ -114,6 +114,10 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ### **_Future Updates_**
 
+- [] add admin request
+- [] add random video generator from an API(fetch multiple videos from API)
+- [] improve the ui
+
 ---
 
 ### **_Credits_**
