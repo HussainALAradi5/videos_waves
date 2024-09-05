@@ -130,4 +130,4 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ---
 
-### what is remaining? BugFix only this is the Remaining and it will be done shortly🧙‍♂️
+### what is next? BugFix only this is the Remaining and it will be done shortly🧙‍♂️
