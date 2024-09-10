@@ -56,9 +56,9 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ### UML Diagrams:(will be updated soon)
 
-#### [hierarchy](./client/public/Videos_Waves%20-Hierarchy_Diagram.drawio.png)
+#### [hierarchy](./images/images/Videos_Waves%20-Hierarchy_Diagram.drawio.png)
 
-#### [UML Diagram](<./client/public/Videos_Waves%20-UML_Diagram.drawio%20(1).png>)
+#### [UML Diagram](<./images/images/Videos_Waves%20-UML_Diagram.drawio%20(1).png>)
 
 ---
 
@@ -66,7 +66,7 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 1. you can upload videos( with using drag & drop) ✔
 2. you have infinite scroll ✔
-3. you can comment [](WIP)
+3. you can comment ✔
 4. you can like or dislike videos ✔
 5. you can register and login ✔
 6. auth for our clients ✔
@@ -78,23 +78,23 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ### showcase:
 
-1. #### homepage: ![showcase](./homePage.png)
+1. #### homepage: ![showcase](./images/homePage.png)
 
 ---
 
-2. #### login: ![showcase](./login.png)
+2. #### login: ![showcase](./images/login.png)
 
 ---
 
-3. #### register: ![showcase](./regsiter.png)
+3. #### register: ![showcase](./images/regsiter.png)
 
 ---
 
-4. #### upload files by drag and drop: ![showcase](./upload.png)
+4. #### upload files by drag and drop: ![showcase](./images/upload.png)
 
 ---
 
-5. #### dark mode showcase: ![showcase](./Dark%20mode.png)
+5. #### dark mode showcase: ![showcase](./images/Dark%20mode.png)
 
 ---
 
@@ -102,22 +102,22 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 #### 1. upload:
 
-![video](./upload.gif)
+![video](./images/upload.gif)
 
 #### 2. auth:
 
-![video](./auth.gif)
+![video](./images/auth.gif)
 
 #### 3. Dark mode:
 
-![video](./darkMode.gif)
+![video](./images/darkMode.gif)
 
 ### **_Future Updates_**
 
 - [ ] add admin request
 - [ ] add random video generator from an API(fetch multiple videos from API)
 - [ ] improve the ui
-
+- [ ] edit/remove comment
 ---
 
 ### **_Credits_**
