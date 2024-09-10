@@ -102,7 +102,7 @@ const getUserDetails = async () => {
 
 const addComment = async (videoId, comment) => {
   const token = getToken()
-  console.log('token:', token)
+
   if (!token) throw new Error('No token found')
 
   try {

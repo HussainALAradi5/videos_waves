@@ -21,12 +21,13 @@ const addComment = async (req, res) => {
 }
 
 const getCommentsByVideo = async (req, res) => {
-  const { id } = req.params
+  const { videoId } = req.params // Extract videoId from params
+
   try {
-    const comments = await Comment.find({ id }).populate('userId')
+    const comments = await Comment.find({ videoId }).populate('userId') // Query by videoId
     res.status(200).json(comments)
   } catch (error) {
-    console.error(error)
+    console.error('Error fetching comments:', error)
     res.status(500).json({ error: 'Server error while fetching comments' })
   }
 }
