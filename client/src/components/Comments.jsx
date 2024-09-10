@@ -9,7 +9,12 @@ import {
   IconButton
 } from '@chakra-ui/react'
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
-import { addComment, editComment, removeComment } from '../service/auth'
+import {
+  addComment,
+  editComment,
+  removeComment,
+  getToken
+} from '../service/auth'
 
 const Comments = ({ videoId, userId }) => {
   const [comments, setComments] = useState([])
@@ -17,9 +22,11 @@ const Comments = ({ videoId, userId }) => {
   const [editCommentId, setEditCommentId] = useState(null)
   const [editCommentText, setEditCommentText] = useState('')
   const [loading, setLoading] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false)
 
   useEffect(() => {
     fetchComments()
+    checkIfLoggedIn()
   }, [videoId])
 
   const fetchComments = async () => {
@@ -32,6 +39,11 @@ const Comments = ({ videoId, userId }) => {
     } catch (error) {
       console.error('Error fetching comments:', error)
     }
+  }
+
+  const checkIfLoggedIn = () => {
+    const token = getToken()
+    setLoggedIn(!!token)
   }
 
   const handleAddComment = async () => {
@@ -116,23 +128,27 @@ const Comments = ({ videoId, userId }) => {
         <Text>No comments yet. Be the first to comment!</Text>
       )}
 
-      <Input
-        value={newComment}
-        onChange={(event) => setNewComment(event.target.value)}
-        placeholder="Add a comment"
-        size="sm"
-        bg="gray.600"
-        color="white"
-        borderColor="gray.500"
-      />
-      <Button
-        onClick={handleAddComment}
-        colorScheme="teal"
-        size="sm"
-        isLoading={loading}
-      >
-        Add Comment
-      </Button>
+      {loggedIn && (
+        <>
+          <Input
+            value={newComment}
+            onChange={(event) => setNewComment(event.target.value)}
+            placeholder="Add a comment"
+            size="sm"
+            bg="gray.600"
+            color="white"
+            borderColor="gray.500"
+          />
+          <Button
+            onClick={handleAddComment}
+            colorScheme="teal"
+            size="sm"
+            isLoading={loading}
+          >
+            Add Comment
+          </Button>
+        </>
+      )}
 
       {editCommentId && (
         <Box mt={4}>
