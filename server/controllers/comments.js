@@ -1,8 +1,7 @@
 const Comment = require('../models/comment')
-const authService = require('../service/auth')
 
 const addComment = async (req, res) => {
-  const { videoId } = req.params
+  const { id } = req.params
   const { comment } = req.body
   const userId = req.user.id
 
@@ -11,20 +10,21 @@ const addComment = async (req, res) => {
   }
 
   try {
-    const newComment = new Comment({ userId, videoId, comment })
+    const newComment = new Comment({ userId, id, comment })
     await newComment.save()
+
     res.status(201).json(newComment)
   } catch (error) {
-    console.error(error)
+    console.error('Error saving comment:', error)
     res.status(500).json({ error: 'Server error while adding comment' })
   }
 }
 
 const getCommentsByVideo = async (req, res) => {
-  const { videoId } = req.params
+  const { id } = req.params
 
   try {
-    const comments = await Comment.find({ videoId }).populate('userId')
+    const comments = await Comment.find({ id }).populate('userId')
     res.status(200).json(comments)
   } catch (error) {
     console.error(error)
