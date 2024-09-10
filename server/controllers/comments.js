@@ -22,7 +22,6 @@ const addComment = async (req, res) => {
 
 const getCommentsByVideo = async (req, res) => {
   const { id } = req.params
-
   try {
     const comments = await Comment.find({ id }).populate('userId')
     res.status(200).json(comments)
