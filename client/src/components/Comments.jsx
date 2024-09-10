@@ -9,6 +9,7 @@ import {
   IconButton
 } from '@chakra-ui/react'
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
+import { Link, useLocation } from 'react-router-dom'
 import {
   addComment,
   editComment,
@@ -16,13 +17,15 @@ import {
   getToken
 } from '../service/auth'
 
-const Comments = ({ videoId, userId }) => {
+const Comments = ({ videoId, userId, displayLimit = 3 }) => {
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState('')
   const [editCommentId, setEditCommentId] = useState(null)
   const [editCommentText, setEditCommentText] = useState('')
   const [loading, setLoading] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false)
+  const location = useLocation()
+  const isVideoPage = location.pathname.startsWith(`/videos/${videoId}`)
 
   useEffect(() => {
     fetchComments()
@@ -87,10 +90,14 @@ const Comments = ({ videoId, userId }) => {
     }
   }
 
+  const commentsToDisplay = isVideoPage
+    ? comments
+    : comments.slice(0, displayLimit)
+
   return (
     <VStack spacing={4} align="start" mt={4}>
-      {comments.length > 0 ? (
-        comments.map((comment) => (
+      {commentsToDisplay.length > 0 ? (
+        commentsToDisplay.map((comment) => (
           <Box
             key={comment._id}
             borderWidth={1}
@@ -128,7 +135,19 @@ const Comments = ({ videoId, userId }) => {
         <Text>No comments yet. Be the first to comment!</Text>
       )}
 
-      {loggedIn && (
+      {!isVideoPage && comments.length > displayLimit && (
+        <Link to={`/videos/${videoId}`}>
+          <Text
+            color="teal.300"
+            _hover={{ textDecoration: 'underline' }}
+            mt={2}
+          >
+            You can read more comments or add a comment by clicking here
+          </Text>
+        </Link>
+      )}
+
+      {loggedIn && (isVideoPage || comments.length <= displayLimit) && (
         <>
           <Input
             value={newComment}

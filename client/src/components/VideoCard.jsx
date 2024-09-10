@@ -1,3 +1,4 @@
+// VideoCard Component
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
@@ -110,7 +111,11 @@ const VideoCard = ({ video }) => {
               Play
             </Button>
           </HStack>
-          <Comments videoId={video._id} userId={userId} />
+          <Comments
+            videoId={video._id}
+            userId={userId}
+            hideAddComment={video.numberOfComments > 3}
+          />
         </VStack>
       </Box>
 
