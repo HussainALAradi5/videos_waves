@@ -56,9 +56,9 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ### UML Diagrams:(will be updated soon)
 
-#### [hierarchy](./images/images/Videos_Waves%20-Hierarchy_Diagram.drawio.png)
+#### [hierarchy](./images/Videos_Waves%20-Hierarchy_Diagram.drawio.png)
 
-#### [UML Diagram](<./images/images/Videos_Waves%20-UML_Diagram.drawio%20(1).png>)
+#### [UML Diagram](<./images/Videos_Waves%20-UML_Diagram.drawio%20(1).png>)
 
 ---
 
