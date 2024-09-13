@@ -20,7 +20,8 @@ const LikeButton = ({ videoId, initialLikes, isLiked }) => {
           description: 'You have disliked this video.',
           status: 'info',
           duration: 3000,
-          isClosable: true
+          isClosable: true,
+          colorScheme: 'red'
         })
       } else {
         await likeVideo(videoId)
@@ -31,7 +32,8 @@ const LikeButton = ({ videoId, initialLikes, isLiked }) => {
           description: 'You have liked this video.',
           status: 'success',
           duration: 3000,
-          isClosable: true
+          isClosable: true,
+          colorScheme: 'blue'
         })
       }
     } catch (error) {
