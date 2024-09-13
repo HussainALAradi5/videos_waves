@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   Box,
   Text,
@@ -30,10 +30,27 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
   const isVideoPage = location.pathname.startsWith(`/videos/${videoId}`)
   const toast = useToast()
 
+  const newCommentRef = useRef(null)
+  const editCommentRef = useRef(null)
+
   useEffect(() => {
     fetchComments()
     checkIfLoggedIn()
   }, [videoId])
+
+  useEffect(() => {
+    if (newCommentRef.current) {
+      newCommentRef.current.style.height = 'auto'
+      newCommentRef.current.style.height = `${newCommentRef.current.scrollHeight}px`
+    }
+  }, [newComment])
+
+  useEffect(() => {
+    if (editCommentRef.current) {
+      editCommentRef.current.style.height = 'auto'
+      editCommentRef.current.style.height = `${editCommentRef.current.scrollHeight}px`
+    }
+  }, [editCommentText])
 
   const fetchComments = async () => {
     try {
@@ -90,7 +107,7 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
       fetchComments()
       toast({
         title: 'Comment edited.',
-        description: 'Your comment has been edited successfully.',
+        description: 'Your comment has been updated successfully.',
         status: 'success',
         duration: 5000,
         isClosable: true
@@ -116,7 +133,7 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
       fetchComments()
       toast({
         title: 'Comment deleted.',
-        description: 'The comment has been deleted successfully.',
+        description: 'Your comment has been removed successfully.',
         status: 'success',
         duration: 5000,
         isClosable: true
@@ -125,7 +142,7 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
       console.error('Error removing comment:', error)
       toast({
         title: 'Error removing comment.',
-        description: 'There was a problem removing the comment.',
+        description: 'There was a problem removing your comment.',
         status: 'error',
         duration: 5000,
         isClosable: true
@@ -153,71 +170,36 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
             width="100%"
             position="relative"
           >
-            <HStack spacing={3}>
+            <HStack spacing={3} mb={2}>
               <Avatar
-                name={comment.userId.userName}
                 src={comment.userId.image}
+                name={comment.userId.userName}
               />
               <Box flex="1">
                 <Text fontWeight="bold">{comment.userId.userName}</Text>
-                <Text mt={1}>{comment.comment}</Text>
+                <Text>{comment.comment}</Text>
               </Box>
-              {comment.userId._id === userId && (
-                <HStack spacing={2} position="absolute" top={2} right={2}>
-                  <IconButton
-                    icon={<AiOutlineEdit />}
-                    colorScheme="teal"
-                    aria-label="Edit"
-                    size="sm"
-                    onClick={() => {
-                      setEditCommentId(comment._id)
-                      setEditCommentText(comment.comment)
-                    }}
-                  />
-                  <IconButton
-                    icon={<AiOutlineDelete />}
-                    colorScheme="red"
-                    aria-label="Delete"
-                    size="sm"
-                    onClick={() => handleRemoveComment(comment._id)}
-                  />
-                </HStack>
-              )}
             </HStack>
-            {editCommentId === comment._id && (
-              <Box mt={4} borderWidth={1} borderRadius="md" p={4} bg="gray.800">
-                <Textarea
-                  value={editCommentText}
-                  onChange={(event) => setEditCommentText(event.target.value)}
-                  placeholder="Edit comment"
+            {comment.userId._id === userId && (
+              <HStack spacing={2} mt={2} position="absolute" top={4} right={4}>
+                <IconButton
+                  icon={<AiOutlineEdit />}
+                  colorScheme="teal"
+                  aria-label="Edit"
                   size="sm"
-                  bg="gray.600"
-                  color="white"
-                  borderColor="gray.500"
-                  borderRadius="md"
-                  p={4}
-                  resize="vertical"
+                  onClick={() => {
+                    setEditCommentId(comment._id)
+                    setEditCommentText(comment.comment)
+                  }}
                 />
-                <HStack mt={2}>
-                  <Button
-                    onClick={handleEditComment}
-                    colorScheme="teal"
-                    size="sm"
-                    isLoading={loading}
-                    p={4}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    onClick={() => setEditCommentId(null)}
-                    colorScheme="gray"
-                    size="sm"
-                    p={4}
-                  >
-                    Cancel
-                  </Button>
-                </HStack>
-              </Box>
+                <IconButton
+                  icon={<AiOutlineDelete />}
+                  colorScheme="red"
+                  aria-label="Delete"
+                  size="sm"
+                  onClick={() => handleRemoveComment(comment._id)}
+                />
+              </HStack>
             )}
           </Box>
         ))
@@ -238,38 +220,93 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
       )}
 
       {loggedIn && (isVideoPage || comments.length <= displayLimit) && (
-        <Box borderWidth={1} borderRadius="md" p={4} bg="gray.700" width="100%">
-          <HStack spacing={3}>
-            <Avatar name="Your avatar" src="" />
-            <Box flex="1">
-              <Textarea
-                value={newComment}
-                onChange={(event) => setNewComment(event.target.value)}
-                placeholder="Add a comment"
-                size="sm"
-                bg="gray.600"
-                color="white"
-                borderColor="gray.500"
-                borderRadius="md"
-                p={4}
-                resize="vertical"
-              />
-            </Box>
-          </HStack>
+        <>
+          <Textarea
+            ref={newCommentRef}
+            value={newComment}
+            onChange={(event) => setNewComment(event.target.value)}
+            placeholder="Add a comment"
+            size="sm"
+            bg="gray.600"
+            color="white"
+            borderColor="gray.500"
+            resize="none"
+            minHeight="40px"
+            maxHeight="200px"
+            overflow="hidden"
+            borderRadius="md"
+            p={2}
+          />
           <Button
             onClick={handleAddComment}
             colorScheme="teal"
-            size="sm"
+            size="md"
             isLoading={loading}
             mt={2}
-            width="100%"
             p={4}
-            bg="teal.500"
-            _hover={{ bg: 'teal.600' }}
+            fontSize="lg"
+            fontWeight="bold"
             borderRadius="md"
+            _hover={{ bg: 'teal.500' }}
+            _active={{ bg: 'teal.600' }}
           >
             Add Comment
           </Button>
+        </>
+      )}
+
+      {editCommentId && (
+        <Box
+          borderWidth={1}
+          borderRadius="md"
+          p={4}
+          bg="gray.700"
+          color="white"
+          width="100%"
+        >
+          <Textarea
+            ref={editCommentRef}
+            value={editCommentText}
+            onChange={(event) => setEditCommentText(event.target.value)}
+            placeholder="Edit comment"
+            size="sm"
+            bg="gray.600"
+            color="white"
+            borderColor="gray.500"
+            resize="none"
+            minHeight="40px"
+            maxHeight="200px"
+            overflow="hidden"
+            borderRadius="md"
+            p={2}
+          />
+          <HStack mt={2}>
+            <Button
+              onClick={handleEditComment}
+              colorScheme="teal"
+              size="md"
+              isLoading={loading}
+              fontSize="lg"
+              fontWeight="bold"
+              borderRadius="md"
+              _hover={{ bg: 'teal.500' }}
+              _active={{ bg: 'teal.600' }}
+            >
+              Save
+            </Button>
+            <Button
+              onClick={() => setEditCommentId(null)}
+              colorScheme="gray"
+              size="md"
+              fontSize="lg"
+              fontWeight="bold"
+              borderRadius="md"
+              _hover={{ bg: 'gray.500' }}
+              _active={{ bg: 'gray.600' }}
+            >
+              Cancel
+            </Button>
+          </HStack>
         </Box>
       )}
     </VStack>
