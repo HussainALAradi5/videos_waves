@@ -21,10 +21,10 @@ const addComment = async (req, res) => {
 }
 
 const getCommentsByVideo = async (req, res) => {
-  const { videoId } = req.params // Extract videoId from params
+  const { videoId } = req.params
 
   try {
-    const comments = await Comment.find({ videoId }).populate('userId') // Query by videoId
+    const comments = await Comment.find({ videoId }).populate('userId')
     res.status(200).json(comments)
   } catch (error) {
     console.error('Error fetching comments:', error)
@@ -78,7 +78,8 @@ const removeComment = async (req, res) => {
         .json({ message: 'Unauthorized to delete this comment' })
     }
 
-    await existingComment.remove()
+    // Use deleteOne instead of remove
+    await Comment.deleteOne({ _id: commentId })
     res.status(200).json({ message: 'Comment deleted successfully' })
   } catch (error) {
     console.error(error)

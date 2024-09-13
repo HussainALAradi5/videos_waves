@@ -148,11 +148,17 @@ const removeComment = async (videoId, commentId) => {
         headers: { Authorization: `Bearer ${token}` }
       }
     )
+
     return response.data
   } catch (error) {
+    console.error(
+      'Error removing comment:',
+      error.response?.data || error.message
+    )
     handleError(error)
   }
 }
+
 const getVideoById = async (videoId) => {
   const token = getToken()
   if (!token) throw new Error('No token found')
