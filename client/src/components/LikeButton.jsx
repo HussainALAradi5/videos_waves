@@ -33,7 +33,7 @@ const LikeButton = ({ videoId, initialLikes, isLiked }) => {
           status: 'success',
           duration: 3000,
           isClosable: true,
-          colorScheme: 'blue'
+          colorScheme: 'purple'
         })
       }
     } catch (error) {
