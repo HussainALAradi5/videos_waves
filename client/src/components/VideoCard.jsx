@@ -1,4 +1,3 @@
-// VideoCard Component
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
@@ -7,7 +6,6 @@ import {
   Text,
   VStack,
   HStack,
-  IconButton,
   Button,
   Modal,
   ModalOverlay,
@@ -17,38 +15,14 @@ import {
   ModalCloseButton,
   useDisclosure
 } from '@chakra-ui/react'
-import { AiOutlineLike, AiOutlinePlayCircle } from 'react-icons/ai'
+import { AiOutlinePlayCircle } from 'react-icons/ai'
 import ReactPlayer from 'react-player'
-import { likeVideo, unlikeVideo } from '../service/auth'
+import LikeButton from './LikeButton'
 import Comments from './Comments'
 
 const VideoCard = ({ video }) => {
-  const [liked, setLiked] = useState(
-    video.likedBy?.includes(localStorage.getItem('userId'))
-  )
-  const [numberOfLikes, setNumberOfLikes] = useState(video.numberOfLikes)
-  const [userId, setUserId] = useState(localStorage.getItem('userId'))
+  const [userId] = useState(localStorage.getItem('userId'))
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const handleLikeClick = async (event) => {
-    event.stopPropagation()
-    try {
-      if (liked) {
-        await unlikeVideo(video._id)
-        setLiked(false)
-        setNumberOfLikes((prev) => prev - 1)
-      } else {
-        await likeVideo(video._id)
-        setLiked(true)
-        setNumberOfLikes((prev) => prev + 1)
-      }
-    } catch (error) {
-      console.error(
-        'Error liking/unliking video:',
-        error.response ? error.response.data : error.message
-      )
-    }
-  }
 
   const handlePlayClick = (event) => {
     event.stopPropagation()
@@ -92,16 +66,11 @@ const VideoCard = ({ video }) => {
             {title}
           </Text>
           <HStack spacing={4} w="full" justify="space-between">
-            <HStack>
-              <IconButton
-                icon={<AiOutlineLike />}
-                variant="ghost"
-                colorScheme="teal"
-                aria-label={liked ? 'Unlike' : 'Like'}
-                onClick={handleLikeClick}
-              />
-              <Text>{numberOfLikes}</Text>
-            </HStack>
+            <LikeButton
+              videoId={video._id}
+              initialLikes={video.numberOfLikes}
+              isLiked={video.likedBy?.includes(userId)}
+            />
             <Button
               leftIcon={<AiOutlinePlayCircle />}
               variant="solid"

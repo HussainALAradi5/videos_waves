@@ -171,14 +171,25 @@ const likeVideo = async (req, res) => {
       video.likedBy = []
     }
 
-    video.likedBy.push(decoded.id)
-    video.numberOfLikes += 1
+    // Toggle like status
+    if (video.likedBy.includes(decoded.id)) {
+      // User already liked, so we need to unlike
+      video.likedBy = video.likedBy.filter(
+        (userId) => userId.toString() !== decoded.id.toString()
+      )
+      video.numberOfLikes -= 1
+      res.status(200).json({ message: 'Disliked', video })
+    } else {
+      // User has not liked, so we need to like
+      video.likedBy.push(decoded.id)
+      video.numberOfLikes += 1
+      res.status(200).json({ message: 'Liked', video })
+    }
 
     await video.save()
-    res.status(200).json(video)
   } catch (error) {
     console.error(error)
-    res.status(500).json({ error: 'Server error while liking video' })
+    res.status(500).json({ error: 'Server error while toggling video like' })
   }
 }
 

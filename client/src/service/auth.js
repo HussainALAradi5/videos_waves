@@ -153,6 +153,19 @@ const removeComment = async (videoId, commentId) => {
     handleError(error)
   }
 }
+const getVideoById = async (videoId) => {
+  const token = getToken()
+  if (!token) throw new Error('No token found')
+
+  try {
+    const response = await axios.get(`${API_URL}/videos/${videoId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    return response.data
+  } catch (error) {
+    handleError(error)
+  }
+}
 
 export {
   register,
@@ -165,5 +178,6 @@ export {
   unlikeVideo,
   addComment,
   editComment,
-  removeComment
+  removeComment,
+  getVideoById
 }
