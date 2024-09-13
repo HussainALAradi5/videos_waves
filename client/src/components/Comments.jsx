@@ -6,7 +6,8 @@ import {
   Button,
   VStack,
   HStack,
-  IconButton
+  IconButton,
+  useToast
 } from '@chakra-ui/react'
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
 import { Link, useLocation } from 'react-router-dom'
@@ -26,6 +27,7 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
   const [loggedIn, setLoggedIn] = useState(false)
   const location = useLocation()
   const isVideoPage = location.pathname.startsWith(`/videos/${videoId}`)
+  const toast = useToast()
 
   useEffect(() => {
     fetchComments()
@@ -38,6 +40,7 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
         `http://localhost:5000/videos/${videoId}/comments`
       )
       const data = await response.json()
+      console.log('Fetched comments:', data)
       setComments(data)
     } catch (error) {
       console.error('Error fetching comments:', error)
@@ -71,6 +74,13 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
       setEditCommentId(null)
       setEditCommentText('')
       fetchComments()
+      toast({
+        title: 'Comment edited.',
+        description: 'Your comment has been updated successfully.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      })
     } catch (error) {
       console.error('Error editing comment:', error)
     } finally {
@@ -83,6 +93,13 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
     try {
       await removeComment(videoId, commentId)
       fetchComments()
+      toast({
+        title: 'Comment deleted.',
+        description: 'The comment has been removed successfully.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      })
     } catch (error) {
       console.error('Error removing comment:', error)
     } finally {
@@ -97,40 +114,48 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
   return (
     <VStack spacing={4} align="start" mt={4}>
       {commentsToDisplay.length > 0 ? (
-        commentsToDisplay.map((comment) => (
-          <Box
-            key={comment._id}
-            borderWidth={1}
-            borderRadius="md"
-            p={4}
-            bg="gray.700"
-            color="white"
-            width="100%"
-          >
-            <Text>{comment.comment}</Text>
-            {comment.userId._id === userId && (
-              <HStack spacing={2} mt={2}>
-                <IconButton
-                  icon={<AiOutlineEdit />}
-                  colorScheme="teal"
-                  aria-label="Edit"
-                  size="sm"
-                  onClick={() => {
-                    setEditCommentId(comment._id)
-                    setEditCommentText(comment.comment)
-                  }}
-                />
-                <IconButton
-                  icon={<AiOutlineDelete />}
-                  colorScheme="red"
-                  aria-label="Delete"
-                  size="sm"
-                  onClick={() => handleRemoveComment(comment._id)}
-                />
+        commentsToDisplay.map((comment) => {
+          console.log('Rendering comment:', comment)
+          return (
+            <Box
+              key={comment._id}
+              borderWidth={1}
+              borderRadius="md"
+              p={4}
+              bg="gray.700"
+              color="white"
+              width="100%"
+            >
+              <HStack spacing={2} mb={2}>
+                <Text fontWeight="bold">
+                  {comment.userId?.userName || 'Unknown User'}
+                </Text>
+                <Text>{comment.comment}</Text>
               </HStack>
-            )}
-          </Box>
-        ))
+              {comment.userId._id === userId && (
+                <HStack spacing={2}>
+                  <IconButton
+                    icon={<AiOutlineEdit />}
+                    colorScheme="teal"
+                    aria-label="Edit"
+                    size="sm"
+                    onClick={() => {
+                      setEditCommentId(comment._id)
+                      setEditCommentText(comment.comment)
+                    }}
+                  />
+                  <IconButton
+                    icon={<AiOutlineDelete />}
+                    colorScheme="red"
+                    aria-label="Delete"
+                    size="sm"
+                    onClick={() => handleRemoveComment(comment._id)}
+                  />
+                </HStack>
+              )}
+            </Box>
+          )
+        })
       ) : (
         <Text>No comments yet. Be the first to comment!</Text>
       )}
