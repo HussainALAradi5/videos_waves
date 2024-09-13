@@ -7,7 +7,8 @@ import {
   VStack,
   HStack,
   IconButton,
-  Avatar
+  Avatar,
+  Tooltip
 } from '@chakra-ui/react'
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
 import { Link, useLocation } from 'react-router-dom'
@@ -99,7 +100,7 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
     <VStack spacing={4} align="start" mt={4}>
       {commentsToDisplay.length > 0 ? (
         commentsToDisplay.map((comment) => (
-          <HStack
+          <Box
             key={comment._id}
             borderWidth={1}
             borderRadius="md"
@@ -107,39 +108,43 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
             bg="gray.700"
             color="white"
             width="100%"
-            spacing={4}
           >
-            <Avatar
-              src={comment.userId.image}
-              name={comment.userId.userName}
-              size="md"
-            />
-            <Box flex="1">
-              <Text fontWeight="bold">{comment.userId.userName}</Text>
-              <Text>{comment.comment}</Text>
+            <HStack spacing={3}>
+              <Avatar
+                name={comment.userId.userName}
+                src={comment.userId.image}
+              />
+              <Box flex="1">
+                <Text fontWeight="bold">{comment.userId.userName}</Text>
+                <Text mt={1}>{comment.comment}</Text>
+              </Box>
               {comment.userId._id === userId && (
-                <HStack spacing={2} mt={2}>
-                  <IconButton
-                    icon={<AiOutlineEdit />}
-                    colorScheme="teal"
-                    aria-label="Edit"
-                    size="sm"
-                    onClick={() => {
-                      setEditCommentId(comment._id)
-                      setEditCommentText(comment.comment)
-                    }}
-                  />
-                  <IconButton
-                    icon={<AiOutlineDelete />}
-                    colorScheme="red"
-                    aria-label="Delete"
-                    size="sm"
-                    onClick={() => handleRemoveComment(comment._id)}
-                  />
+                <HStack spacing={2}>
+                  <Tooltip label="Edit Comment">
+                    <IconButton
+                      icon={<AiOutlineEdit />}
+                      colorScheme="teal"
+                      aria-label="Edit"
+                      size="sm"
+                      onClick={() => {
+                        setEditCommentId(comment._id)
+                        setEditCommentText(comment.comment)
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip label="Delete Comment">
+                    <IconButton
+                      icon={<AiOutlineDelete />}
+                      colorScheme="red"
+                      aria-label="Delete"
+                      size="sm"
+                      onClick={() => handleRemoveComment(comment._id)}
+                    />
+                  </Tooltip>
                 </HStack>
               )}
-            </Box>
-          </HStack>
+            </HStack>
+          </Box>
         ))
       ) : (
         <Text>No comments yet. Be the first to comment!</Text>
