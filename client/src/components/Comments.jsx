@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react'
 import {
   Box,
   Text,
-  Input,
+  Textarea,
   Button,
   VStack,
   HStack,
   IconButton,
-  Avatar,
-  Tooltip
+  useToast,
+  Avatar
 } from '@chakra-ui/react'
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
 import { Link, useLocation } from 'react-router-dom'
@@ -28,6 +28,7 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
   const [loggedIn, setLoggedIn] = useState(false)
   const location = useLocation()
   const isVideoPage = location.pathname.startsWith(`/videos/${videoId}`)
+  const toast = useToast()
 
   useEffect(() => {
     fetchComments()
@@ -58,8 +59,22 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
       await addComment(videoId, newComment)
       setNewComment('')
       fetchComments()
+      toast({
+        title: 'Comment added.',
+        description: 'Your comment has been added successfully.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true
+      })
     } catch (error) {
       console.error('Error adding comment:', error)
+      toast({
+        title: 'Error adding comment.',
+        description: 'There was a problem adding your comment.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true
+      })
     } finally {
       setLoading(false)
     }
@@ -73,8 +88,22 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
       setEditCommentId(null)
       setEditCommentText('')
       fetchComments()
+      toast({
+        title: 'Comment edited.',
+        description: 'Your comment has been edited successfully.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true
+      })
     } catch (error) {
       console.error('Error editing comment:', error)
+      toast({
+        title: 'Error editing comment.',
+        description: 'There was a problem editing your comment.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true
+      })
     } finally {
       setLoading(false)
     }
@@ -85,8 +114,22 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
     try {
       await removeComment(videoId, commentId)
       fetchComments()
+      toast({
+        title: 'Comment deleted.',
+        description: 'The comment has been deleted successfully.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true
+      })
     } catch (error) {
       console.error('Error removing comment:', error)
+      toast({
+        title: 'Error removing comment.',
+        description: 'There was a problem removing the comment.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true
+      })
     } finally {
       setLoading(false)
     }
@@ -108,6 +151,7 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
             bg="gray.700"
             color="white"
             width="100%"
+            position="relative"
           >
             <HStack spacing={3}>
               <Avatar
@@ -119,31 +163,62 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
                 <Text mt={1}>{comment.comment}</Text>
               </Box>
               {comment.userId._id === userId && (
-                <HStack spacing={2}>
-                  <Tooltip label="Edit Comment">
-                    <IconButton
-                      icon={<AiOutlineEdit />}
-                      colorScheme="teal"
-                      aria-label="Edit"
-                      size="sm"
-                      onClick={() => {
-                        setEditCommentId(comment._id)
-                        setEditCommentText(comment.comment)
-                      }}
-                    />
-                  </Tooltip>
-                  <Tooltip label="Delete Comment">
-                    <IconButton
-                      icon={<AiOutlineDelete />}
-                      colorScheme="red"
-                      aria-label="Delete"
-                      size="sm"
-                      onClick={() => handleRemoveComment(comment._id)}
-                    />
-                  </Tooltip>
+                <HStack spacing={2} position="absolute" top={2} right={2}>
+                  <IconButton
+                    icon={<AiOutlineEdit />}
+                    colorScheme="teal"
+                    aria-label="Edit"
+                    size="sm"
+                    onClick={() => {
+                      setEditCommentId(comment._id)
+                      setEditCommentText(comment.comment)
+                    }}
+                  />
+                  <IconButton
+                    icon={<AiOutlineDelete />}
+                    colorScheme="red"
+                    aria-label="Delete"
+                    size="sm"
+                    onClick={() => handleRemoveComment(comment._id)}
+                  />
                 </HStack>
               )}
             </HStack>
+            {editCommentId === comment._id && (
+              <Box mt={4} borderWidth={1} borderRadius="md" p={4} bg="gray.800">
+                <Textarea
+                  value={editCommentText}
+                  onChange={(event) => setEditCommentText(event.target.value)}
+                  placeholder="Edit comment"
+                  size="sm"
+                  bg="gray.600"
+                  color="white"
+                  borderColor="gray.500"
+                  borderRadius="md"
+                  p={4}
+                  resize="vertical"
+                />
+                <HStack mt={2}>
+                  <Button
+                    onClick={handleEditComment}
+                    colorScheme="teal"
+                    size="sm"
+                    isLoading={loading}
+                    p={4}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    onClick={() => setEditCommentId(null)}
+                    colorScheme="gray"
+                    size="sm"
+                    p={4}
+                  >
+                    Cancel
+                  </Button>
+                </HStack>
+              </Box>
+            )}
           </Box>
         ))
       ) : (
@@ -163,55 +238,38 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
       )}
 
       {loggedIn && (isVideoPage || comments.length <= displayLimit) && (
-        <>
-          <Input
-            value={newComment}
-            onChange={(event) => setNewComment(event.target.value)}
-            placeholder="Add a comment"
-            size="sm"
-            bg="gray.600"
-            color="white"
-            borderColor="gray.500"
-          />
+        <Box borderWidth={1} borderRadius="md" p={4} bg="gray.700" width="100%">
+          <HStack spacing={3}>
+            <Avatar name="Your avatar" src="" />
+            <Box flex="1">
+              <Textarea
+                value={newComment}
+                onChange={(event) => setNewComment(event.target.value)}
+                placeholder="Add a comment"
+                size="sm"
+                bg="gray.600"
+                color="white"
+                borderColor="gray.500"
+                borderRadius="md"
+                p={4}
+                resize="vertical"
+              />
+            </Box>
+          </HStack>
           <Button
             onClick={handleAddComment}
             colorScheme="teal"
             size="sm"
             isLoading={loading}
+            mt={2}
+            width="100%"
+            p={4}
+            bg="teal.500"
+            _hover={{ bg: 'teal.600' }}
+            borderRadius="md"
           >
             Add Comment
           </Button>
-        </>
-      )}
-
-      {editCommentId && (
-        <Box mt={4}>
-          <Input
-            value={editCommentText}
-            onChange={(event) => setEditCommentText(event.target.value)}
-            placeholder="Edit comment"
-            size="sm"
-            bg="gray.600"
-            color="white"
-            borderColor="gray.500"
-          />
-          <HStack mt={2}>
-            <Button
-              onClick={handleEditComment}
-              colorScheme="teal"
-              size="sm"
-              isLoading={loading}
-            >
-              Save
-            </Button>
-            <Button
-              onClick={() => setEditCommentId(null)}
-              colorScheme="gray"
-              size="sm"
-            >
-              Cancel
-            </Button>
-          </HStack>
         </Box>
       )}
     </VStack>
