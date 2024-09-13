@@ -78,7 +78,6 @@ const removeComment = async (req, res) => {
         .json({ message: 'Unauthorized to delete this comment' })
     }
 
-    // Use deleteOne instead of remove
     await Comment.deleteOne({ _id: commentId })
     res.status(200).json({ message: 'Comment deleted successfully' })
   } catch (error) {
