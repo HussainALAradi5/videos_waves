@@ -7,7 +7,7 @@ import {
   VStack,
   HStack,
   IconButton,
-  useToast
+  Avatar
 } from '@chakra-ui/react'
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
 import { Link, useLocation } from 'react-router-dom'
@@ -27,7 +27,6 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
   const [loggedIn, setLoggedIn] = useState(false)
   const location = useLocation()
   const isVideoPage = location.pathname.startsWith(`/videos/${videoId}`)
-  const toast = useToast()
 
   useEffect(() => {
     fetchComments()
@@ -40,7 +39,6 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
         `http://localhost:5000/videos/${videoId}/comments`
       )
       const data = await response.json()
-      console.log('Fetched comments:', data)
       setComments(data)
     } catch (error) {
       console.error('Error fetching comments:', error)
@@ -74,13 +72,6 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
       setEditCommentId(null)
       setEditCommentText('')
       fetchComments()
-      toast({
-        title: 'Comment edited.',
-        description: 'Your comment has been updated successfully.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true
-      })
     } catch (error) {
       console.error('Error editing comment:', error)
     } finally {
@@ -93,13 +84,6 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
     try {
       await removeComment(videoId, commentId)
       fetchComments()
-      toast({
-        title: 'Comment deleted.',
-        description: 'The comment has been removed successfully.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true
-      })
     } catch (error) {
       console.error('Error removing comment:', error)
     } finally {
@@ -114,26 +98,27 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
   return (
     <VStack spacing={4} align="start" mt={4}>
       {commentsToDisplay.length > 0 ? (
-        commentsToDisplay.map((comment) => {
-          console.log('Rendering comment:', comment)
-          return (
-            <Box
-              key={comment._id}
-              borderWidth={1}
-              borderRadius="md"
-              p={4}
-              bg="gray.700"
-              color="white"
-              width="100%"
-            >
-              <HStack spacing={2} mb={2}>
-                <Text fontWeight="bold">
-                  {comment.userId?.userName || 'Unknown User'}
-                </Text>
-                <Text>{comment.comment}</Text>
-              </HStack>
+        commentsToDisplay.map((comment) => (
+          <HStack
+            key={comment._id}
+            borderWidth={1}
+            borderRadius="md"
+            p={4}
+            bg="gray.700"
+            color="white"
+            width="100%"
+            spacing={4}
+          >
+            <Avatar
+              src={comment.userId.image}
+              name={comment.userId.userName}
+              size="md"
+            />
+            <Box flex="1">
+              <Text fontWeight="bold">{comment.userId.userName}</Text>
+              <Text>{comment.comment}</Text>
               {comment.userId._id === userId && (
-                <HStack spacing={2}>
+                <HStack spacing={2} mt={2}>
                   <IconButton
                     icon={<AiOutlineEdit />}
                     colorScheme="teal"
@@ -154,8 +139,8 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
                 </HStack>
               )}
             </Box>
-          )
-        })
+          </HStack>
+        ))
       ) : (
         <Text>No comments yet. Be the first to comment!</Text>
       )}
