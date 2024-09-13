@@ -117,7 +117,8 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 - [ ] add admin request
 - [ ] add random video generator from an API(fetch multiple videos from API)
 - [ ] improve the ui
-- [ ] edit/remove comment
+- [x] edit/remove comment
+
 ---
 
 ### **_Credits_**
