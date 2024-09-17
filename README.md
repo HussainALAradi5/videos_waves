@@ -14,7 +14,7 @@
 
 #### this project is small and project to give mimic the behaviour of the TikTok and have some minor tweaks to learn new skills .
 
-#### [project]:Videos Waves
+#### [Project](Video_Waves)
 
 ---
 
@@ -96,6 +96,8 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 5. #### dark mode showcase: ![showcase](./images/Dark%20mode.png)
 
+6. #### comment section showcase: ![showcase](./images/CommentSection.png)
+
 ---
 
 #### animated showcase:
@@ -112,6 +114,10 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ![video](./images/darkMode.gif)
 
+#### 4. Comments add/edit/remove
+
+![video](./images/comments%20update_edit.gif)
+
 ### **_Future Updates_**
 
 - [ ] add admin request
@@ -127,7 +133,7 @@ unfortunately i was aiming to make it usable and make it with link 😞 but dont
 
 ##### 2. [Chakra UI](https://v2.chakra-ui.com/) for the nice UX and responisve UI🌊
 
-##### our nice website inspired by:The Populer [TikTok] (https://www.tiktok.com/en/)
+##### our nice website inspired by:The Populer [TikTok](https://www.tiktok.com/en/)
 
 ---
 
