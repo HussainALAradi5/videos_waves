@@ -16,7 +16,8 @@ const Login = () => {
         description: 'You are now logged in. Redirecting to profile...',
         status: 'success',
         duration: 2000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
       navigate('/profile') // Immediate redirection
     } catch (error) {
@@ -25,7 +26,8 @@ const Login = () => {
         description: error.response?.data?.message || 'An error occurred.',
         status: 'error',
         duration: 2000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
     }
   }

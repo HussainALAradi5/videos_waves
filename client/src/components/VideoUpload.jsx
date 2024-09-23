@@ -35,7 +35,8 @@ const VideoUpload = ({ onUpload }) => {
         description: 'Please select a video file to upload.',
         status: 'warning',
         duration: 2000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
       return
     }
@@ -46,7 +47,8 @@ const VideoUpload = ({ onUpload }) => {
         description: 'Please enter a title for the video.',
         status: 'warning',
         duration: 2000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
       return
     }
@@ -63,7 +65,7 @@ const VideoUpload = ({ onUpload }) => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           },
           onUploadProgress: (progressEvent) => {
             const percentCompleted = Math.round(
@@ -80,7 +82,8 @@ const VideoUpload = ({ onUpload }) => {
         title: 'Upload successful.',
         status: 'success',
         duration: 2000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
 
       if (onUpload) {
@@ -96,7 +99,8 @@ const VideoUpload = ({ onUpload }) => {
           'There was an error uploading your video.',
         status: 'error',
         duration: 2000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
     } finally {
       setUploading(false)

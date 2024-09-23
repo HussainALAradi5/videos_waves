@@ -20,7 +20,8 @@ const Profile = () => {
           description: 'Please log in again.',
           status: 'error',
           duration: 2000,
-          isClosable: true
+          isClosable: true,
+          position: 'top-right'
         })
         navigate('/login')
       }

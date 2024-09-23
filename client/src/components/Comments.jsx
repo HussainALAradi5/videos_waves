@@ -136,7 +136,8 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
         description: 'Your comment has been removed successfully.',
         status: 'success',
         duration: 5000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
     } catch (error) {
       console.error('Error removing comment:', error)
@@ -145,7 +146,8 @@ const Comments = ({ videoId, userId, displayLimit = 3 }) => {
         description: 'There was a problem removing your comment.',
         status: 'error',
         duration: 5000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
     } finally {
       setLoading(false)

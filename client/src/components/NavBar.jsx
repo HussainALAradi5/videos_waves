@@ -40,7 +40,8 @@ const NavBar = () => {
       title: 'Logged out successfully.',
       status: 'success',
       duration: 2000,
-      isClosable: true
+      isClosable: true,
+      position: 'top-right'
     })
     navigate('/')
   }

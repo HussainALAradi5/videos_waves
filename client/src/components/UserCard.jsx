@@ -22,14 +22,16 @@ const UserCard = ({ user, onProfileUpdate }) => {
         title: 'Profile updated.',
         status: 'success',
         duration: 2000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
     } catch (error) {
       toast({
         title: 'Error updating profile.',
         status: 'error',
         duration: 2000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
     }
   }

@@ -15,7 +15,8 @@ const Register = () => {
         description: 'You are now registered. Redirecting to login...',
         status: 'success',
         duration: 4000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
       setTimeout(() => navigate('/login'), 4000)
     } catch (error) {
@@ -24,6 +25,7 @@ const Register = () => {
         description: error.response?.data?.message || 'An error occurred.',
         status: 'error',
         duration: 4000,
+        position: 'top-right',
         isClosable: true
       })
     }

@@ -27,7 +27,8 @@ const ProfileEdit = ({ initialData, onSave, onCancel }) => {
         description: 'Please fill out all fields.',
         status: 'error',
         duration: 2000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
       return
     }
@@ -38,14 +39,20 @@ const ProfileEdit = ({ initialData, onSave, onCancel }) => {
         description: 'New password and confirm password do not match.',
         status: 'error',
         duration: 2000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
       return
     }
 
     try {
       await updateProfile(formData)
-      toast({ title: 'Profile updated.', status: 'success', duration: 2000 })
+      toast({
+        title: 'Profile updated.',
+        status: 'success',
+        duration: 2000,
+        position: 'top-right'
+      })
       onSave()
     } catch (error) {
       toast({
@@ -54,7 +61,8 @@ const ProfileEdit = ({ initialData, onSave, onCancel }) => {
           error.message || 'An error occurred while updating your profile.',
         status: 'error',
         duration: 2000,
-        isClosable: true
+        isClosable: true,
+        position: 'top-right'
       })
     }
   }
